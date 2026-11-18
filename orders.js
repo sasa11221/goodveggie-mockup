@@ -11,7 +11,7 @@
   const group = (items) => items.reduce((g, x) => ((g[x.src] = g[x.src] || []).push(x), g), {});
   const linesHtml = (items) => Object.entries(group(items)).map(([src, xs]) =>
     `<div class="co-group"><h3>${esc(src)}</h3>${xs.map((x) =>
-      `<p class="co-line"><span>${esc(x.name)} <small>× ${x.qty}</small></span><span>${x.price ? money(x.qty * x.price) : '<span class="tbd">待填</span>'}</span></p>`).join('')}</div>`).join('');
+      `<p class="co-line"><span>${esc(x.name)} <small>× ${x.qty}</small></span><span>${x.price ? money(x.qty * x.price) : ''}</span></p>`).join('')}</div>`).join('');
 
   // ───────── 結帳頁 ─────────
   const form = $('co');
@@ -128,7 +128,7 @@
     if (o.status === 'done' || o.status === 'cancel') acts.push(`<button type="button" class="btn-small" data-act="again">再買一次</button>`);
     const who = o.team ? `${esc(o.team.org)}${o.team.tax ? `（統編 ${esc(o.team.tax)}）` : ''}${o.team.split ? '・每份分開包裝' : ''}` : '個人';
     return `<article class="od-card st-${cls}" data-id="${esc(o.id)}">
-      <header class="od-head"><div><h2>${esc(o.id)}${o.team ? '<span class="od-who">公司・團體</span>' : ''}</h2><small>${new Date(o.created).toLocaleDateString('zh-TW')} 下單${o.demo ? '・<span class="tbd">示意訂單</span>' : ''}</small></div><span class="od-pill">${label}</span></header>
+      <header class="od-head"><div><h2>${esc(o.id)}${o.team ? '<span class="od-who">公司・團體</span>' : ''}</h2><small>${new Date(o.created).toLocaleDateString('zh-TW')} 下單${o.demo ? '' : ''}</small></div><span class="od-pill">${label}</span></header>
       ${steps}
       ${o.status === 'ready' ? `<p class="od-ready">訂單已確認，菜會在 <b>${gvFmt(day)}</b> 早上採收後出貨，出貨時會傳 LINE 通知你。</p>` : ''}
       ${o.status === 'pending' ? `<p class="od-wait">我們正在確認庫存，好了會傳 LINE 給你。這段時間可以自己取消。</p>` : ''}

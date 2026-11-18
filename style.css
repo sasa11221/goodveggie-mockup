@@ -1020,3 +1020,6 @@ html,body{overflow-x:clip}
 .text-link:hover::after{transform:translateX(3px)}
 .text-link:active{transform:scale(.97)}
 .farm-row .text-link{margin-top:8px}
+
+/* 對外版本：保險起見，任何漏掉的待辦都不顯示 */
+.tbd,.mockbar,.mock-only{display:none!important}
