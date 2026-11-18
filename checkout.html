@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>結帳｜食在好蔬</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="img/LOGO.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="mockbar">模擬稿（A 版）　<span class="tbd">黃底文字</span> 是需要你確認或補上的內容　·　結帳只是前端示意，不會真的送出</div>
+<header class="site-head"><div class="container head-row">
+  <a class="logo" href="index.html"><img src="img/LOGO.png" alt=""><span class="logo-text"><b>食在好蔬</b></span></a>
+  <nav aria-label="主選單"><ul class="nav" id="nav"><li><a href="shop.html">市集</a></li><li><a href="veggies.html">我們的好蔬</a></li><li><a href="farms.html">合作農場</a></li><li><a href="story.html">品牌故事</a></li><li><a href="partner.html">合作方式</a></li><li><a href="enterprise.html">企業採購</a></li><li><a href="faq.html">購物說明</a></li><li class="nav-orders"><a href="orders.html">我的訂單</a></li></ul></nav>
+  <div class="head-acts"><button class="cart" id="cart-open" type="button" aria-label="購物車"><svg class="cart-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.2l2.1 10.1a2 2 0 0 0 2 1.6h7.5a2 2 0 0 0 1.9-1.5L20.5 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg><span class="count" id="count">0</span></button><button class="line-login" id="line-login-h" type="button"><svg class="line-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s6-3.5 8.2-6C21.4 14.2 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span>LINE 登入</span></button><div class="user-menu" id="user-menu" hidden><button class="user-chip" id="user-chip" type="button" aria-haspopup="true" aria-expanded="false"><span class="ava" id="user-ava">王</span><span class="nm" id="user-nm">王小明</span></button><div class="user-pop" id="user-pop" hidden><a href="account.html">會員中心</a><a href="orders.html">我的訂單</a><button type="button" id="logout-h">登出</button></div></div></div>
+  <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="開啟選單"><span></span><span></span><span></span></button>
+</div></header>
+<main>
+<div class="container">
+  <nav class="crumbs" aria-label="麵包屑"><ol><li><a href="index.html">首頁</a></li><li><a href="shop.html">市集</a></li><li aria-current="page">結帳</li></ol></nav>
+  <div class="page-intro"><h1>結帳</h1><p class="lead">填好送達地址和出貨日就完成了。送出時不會扣款，我們確認庫存後會用 LINE 通知你。</p></div>
+
+  <div class="co-empty" id="co-empty" hidden>
+    <p>購物車是空的，先到市集挑這週採收的菜吧。</p>
+    <a class="btn" href="shop.html">去市集逛逛</a>
+  </div>
+
+  <form class="co" id="co" novalidate>
+    <div class="co-main">
+      <section class="co-step" aria-labelledby="s1"><h2 id="s1"><span class="co-n">1</span>誰要訂</h2>
+        <div class="co-opts co-who-type" role="radiogroup" aria-label="訂購身分">
+          <label class="co-opt"><input type="radio" name="buyer" value="personal" checked><span><b>個人</b><small>自己或家人吃</small></span></label>
+          <label class="co-opt"><input type="radio" name="buyer" value="team"><span><b>公司・團體</b><small>幫同事、社團一起訂</small></span></label>
+        </div>
+        <div class="co-login" id="co-login">
+          <p>用 LINE 登入後會自動帶入姓名，訂單狀態也會傳到你的 LINE。不用另外註冊。</p>
+          <button type="button" class="btn-line" id="line-login"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s6-3.5 8.2-6C21.4 14.2 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>用 LINE 登入</button>
+          <p class="co-hint" id="login-err" hidden>請先用 LINE 登入。</p>
+        </div>
+        <div class="co-who" id="co-who" hidden>
+          <p class="co-me"><span class="co-ava" id="ava">王</span><span><b id="me-name">王小明</b><small>已用 LINE 登入（示意帳號）</small></span><button type="button" class="link-btn" id="logout">換一個帳號</button></p>
+          <div class="co-fields">
+            <label>聯絡人姓名<input id="f-name" autocomplete="name" required></label>
+            <label>手機號碼<input id="f-phone" inputmode="tel" autocomplete="tel" placeholder="0912345678" required><small class="co-err" id="phone-err" hidden>請輸入 09 開頭的 10 位數手機號碼</small></label>
+          </div>
+          <div class="co-team" id="team-box" hidden>
+            <div class="co-fields">
+              <label>公司或團體名稱<input id="f-org" autocomplete="organization"><small class="co-err" id="org-err" hidden>請填寫公司或團體名稱</small></label>
+              <label>統一編號（要發票再填）<input id="f-tax" inputmode="numeric" maxlength="8" placeholder="8 碼數字"></label>
+            </div>
+            <label class="co-check"><input type="checkbox" id="f-split"> 每份分開包裝、貼上姓名</label>
+            <label class="co-memo" id="split-box" hidden>名單與每人的份量<textarea id="f-list" rows="3" placeholder="例如：&#10;小陳　搭配包 ×1&#10;小林　搭配包 ×1、猴頭菇 ×1"></textarea></label>
+          </div>
+        </div>
+      </section>
+
+      <section class="co-step" aria-labelledby="s2"><h2 id="s2"><span class="co-n">2</span>送到哪裡</h2>
+        <label class="co-memo co-addr">送達地址<input id="f-addr" autocomplete="street-address" placeholder="例如：台北市北投區學園路 1 號 3 樓"><small class="co-err" id="addr-err" hidden>請填寫送達地址</small></label>
+        <p class="co-note">確認訂單時，我們會用 LINE 跟你確認配送方式和運費。<span class="tbd">配送方式與運費待定</span></p>
+      </section>
+
+      <section class="co-step" aria-labelledby="s3"><h2 id="s3"><span class="co-n">3</span>哪一天出貨</h2>
+        <p class="co-sub" id="day-sub">萵苣在出貨當天早上採收，連根裝袋送出。</p>
+        <div class="co-opts co-days" id="days" role="radiogroup" aria-labelledby="s3"></div>
+        <p class="co-hint" id="day-err" hidden>請選一個出貨日。</p>
+        <p class="co-note" id="farm-note" hidden>合作農場的商品會和萵苣一起送到。<span class="tbd">合作農場商品的出貨方式待確認</span></p>
+      </section>
+
+      <section class="co-step" aria-labelledby="s4"><h2 id="s4"><span class="co-n">4</span>付款方式</h2>
+        <div class="co-opts" role="radiogroup" aria-labelledby="s4">
+          <label class="co-opt"><input type="radio" name="pay" value="銀行轉帳" checked><span><b>銀行轉帳</b><small>確認訂單後，LINE 會傳轉帳帳號給你</small></span></label>
+          <label class="co-opt" id="pay-invoice" hidden><input type="radio" name="pay" value="開發票請款"><span><b>開發票請款</b><small>公司・團體適用 <span class="tbd">請款方式待定</span></small></span></label>
+          <label class="co-opt is-off"><input type="radio" name="pay" value="LINE Pay" disabled><span><b>LINE Pay</b><small><span class="tbd">之後開放</span></small></span></label>
+        </div>
+        <label class="co-memo">備註（選填）<textarea id="f-note" rows="2" placeholder="例如：會請同事代領"></textarea></label>
+      </section>
+    </div>
+
+    <aside class="co-sum" aria-labelledby="sum-h">
+      <div class="co-card">
+        <h2 id="sum-h">訂單內容</h2>
+        <div id="sum-lines"></div>
+        <dl class="co-tot">
+          <div><dt>小計</dt><dd id="sum-sub">NT$0</dd></div>
+          <div><dt>運費</dt><dd id="sum-ship"><span class="tbd">確認訂單時告知</span></dd></div>
+          <div class="grand"><dt>合計</dt><dd id="sum-total">NT$0</dd></div>
+        </dl>
+        <p class="co-pick" id="sum-pick">還沒填送達地址和出貨日</p>
+        <button type="submit" class="btn co-submit" id="submit">送出訂單</button>
+        <p class="co-fine">送出後不扣款。確認庫存後我們會用 LINE 通知你；確認前都可以在「我的訂單」自己取消。</p>
+        <a class="co-back" href="shop.html">← 繼續逛市集</a>
+      </div>
+    </aside>
+  </form>
+  <section class="notes" id="co-notes"><h2>購買須知</h2>
+  <div class="notes-grid">
+    <div><h3>注意事項</h3><ul>
+      <li>本農場採自然農法栽培，菜根可能附有微小生物殘留，屬正常現象。食用前請務必清洗乾淨。</li>
+      <li>各品項當季產量浮動，下單後若缺貨，農場會主動以 LINE 通知並提供替代方案。</li>
+      <li>每個帳號每天最多訂 10 包萵苣。</li></ul></div>
+    <div><h3>配送與付款</h3><ul>
+      <li>確認庫存後，會用 LINE 通知你出貨時間。</li>
+      <li>配送方式與運費：<span class="tbd">待定</span></li>
+      <li>付款：銀行轉帳 <span class="tbd">其他方式待定</span></li></ul></div>
+    <div><h3>退換貨</h3><ul>
+      <li>生鮮蔬菜屬不易保存商品，原則上不接受退貨。</li>
+      <li>收到菜時若發現嚴重蟲蛀、腐爛或品項錯誤，請在收到當天透過 LINE 官方帳號回報並附照片，我們會在下次出貨時補償或全額退款。</li></ul></div>
+  </div></section>
+</div></main>
+<footer class="site-foot"><div class="container foot-row">
+  <div><strong>食在好蔬</strong><p>臺北市北投區一德里學園路<br>chihaoshu@eatgoodveg.com<br><span class="tbd">電話待補</span></p></div>
+  <nav aria-label="逛逛"><h2 class="foot-h">逛逛</h2><ul><li><a href="shop.html">市集</a></li><li><a href="veggies.html">我們的好蔬</a></li><li><a href="farms.html">合作農場</a></li><li><a href="story.html">品牌故事</a></li></ul></nav>
+  <nav aria-label="幫助"><h2 class="foot-h">幫助</h2><ul><li><a href="faq.html">購物說明</a></li><li><a href="enterprise.html">企業採購</a></li><li><a href="faq.html#return">退換貨</a></li><li><a href="faq.html#privacy">隱私權條款</a></li><li><a class="foot-line" href="https://lin.ee/PJHXHVrQ" rel="noopener"><svg class="line-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s6-3.5 8.2-6C21.4 14.2 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>加入 LINE 好友</a></li><li><a href="partner.html">成為合作農場</a></li></ul></nav>
+</div></footer>
+<aside class="drawer" id="drawer" aria-label="購物車" aria-hidden="true" inert>
+  <div class="drawer-head"><h2>購物車</h2><button type="button" id="cart-close" aria-label="關閉購物車">×</button></div>
+  <div class="drawer-body" id="drawer-body"></div>
+  <div class="drawer-foot"><div class="total"><span>小計</span><span id="total">NT$0</span></div>
+    <p>萵苣和合作農場的商品一次結帳，個人或公司訂購都可以。<span id="next-harvest"></span></p>
+    <a class="btn" href="checkout.html">前往結帳</a></div>
+</aside><div class="scrim" id="scrim"></div>
+<script src="site.js"></script>
+<script src="orders.js"></script>
+</body></html>
