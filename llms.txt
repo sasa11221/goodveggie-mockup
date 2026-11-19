@@ -9,14 +9,14 @@
 - 聯絡：LINE https://lin.ee/PJHXHVrQ　Email chihaoshu@eatgoodveg.com
 
 ## 買菜
-- [市集](https://sasa11221.github.io/goodveggie-mockup/shop.html)：一次買齊北投魚菜共生萵苣，以及合作農場的有機香菇、猴頭菇、黑木耳。萵苣採收當天出貨。
+- [市集](https://sasa11221.github.io/goodveggie-mockup/shop.html)：一次買齊北投魚菜共生萵苣、森川鹿場的溫室萵苣，以及添丁的有機乾香菇、猴頭菇、黑木耳與菇類加工品。萵苣採收當天出貨。
 - [我們的好蔬](https://sasa11221.github.io/goodveggie-mockup/veggies.html)：認識食在好蔬北投農場的 12 種蔬菜：紅奶油萵苣、甜蘿蔓、紅橡木萵苣、羽衣甘藍、芝麻葉等，每種的口感、吃法與搭配。
 - [農場搭配萵苣包](https://sasa11221.github.io/goodveggie-mockup/combo.html)：由農場依當天採收隨機搭配的萵苣，每包至少 400 公克，NT$200。
 
 ## 認識我們
 - [品牌故事](https://sasa11221.github.io/goodveggie-mockup/story.html)：食在好蔬從北投的一座魚菜共生農場開始，後來把訂購系統打開，做成讓更多農友一起上架的市集。
 - [好蔬知識](https://sasa11221.github.io/goodveggie-mockup/guide.html)：12 種萵苣與葉菜的口感差別、買回家怎麼冷藏保存、生吃熟食的吃法，以及北投魚菜共生農場怎麼不用農藥和化肥種菜。
-- [合作農場](https://sasa11221.github.io/goodveggie-mockup/farms.html)：食在好蔬合作的農場：桃園大溪添丁養生黑木耳的有機菇，以及更多用心種植的小農。
+- [合作農場](https://sasa11221.github.io/goodveggie-mockup/farms.html)：食在好蔬的合作農場：桃園大溪的有機菇農場添丁養生黑木耳，和新北三芝用魚菜共生溫室種萵苣的森川鹿場。每一家都實地拜訪過。
 - [添丁養生黑木耳](https://sasa11221.github.io/goodveggie-mockup/farm-tianding.html)：桃園大溪的添丁養生黑木耳，種植香菇、黑木耳、猴頭菇、白雪菇、紫雲菇。在食在好蔬和北投萵苣一起結帳。
 - [森川鹿場](https://sasa11221.github.io/goodveggie-mockup/farm-morikawa.html)：森川鹿場在場內溫室用魚菜共生種萵苣，綠皺葉萵苣、紅綠橡木萵苣和捲葉苦苣，在食在好蔬市集可以一起結帳。
 
@@ -25,6 +25,17 @@
 - [餐廳・特殊需求](https://sasa11221.github.io/goodveggie-mockup/custom.html)：餐廳、料理職人、活動與禮盒，指定品種與規格、大量或固定週期採購，告訴我們需求，我們一起安排。
 - [企業採購](https://sasa11221.github.io/goodveggie-mockup/enterprise.html)：員工福利、會議餐點、節慶禮盒，統一訂購、分裝配送。在地生產在地銷售，降低運輸碳排、支持在地農友，採購資料可用於 ESG 報告。
 - [合作方式](https://sasa11221.github.io/goodveggie-mockup/partner.html)：想把作物放上食在好蔬市集？我們實地拜訪、幫你建農場頁與商品頁，接單和通知交給我們。
+
+## 合作農場的商品
+- [綠皺葉萵苣](https://sasa11221.github.io/goodveggie-mockup/item-mk-curly.html)：森川鹿場在三芝的溫室用魚菜共生種的皺葉萵苣。NT$250／包，在食在好蔬和北投萵苣一起結帳。
+- [捲葉苦苣](https://sasa11221.github.io/goodveggie-mockup/item-mk-frisee.html)：葉子細碎捲曲的苦苣，森川鹿場溫室魚菜共生栽培。NT$250／包，在食在好蔬和北投萵苣一起結帳。
+- [紅綠橡木萵苣混合包](https://sasa11221.github.io/goodveggie-mockup/item-mk-oak-mix.html)：紅橡木和綠橡木萵苣一起裝，一包就有兩種顏色。森川鹿場溫室魚菜共生栽培。NT$250／包，在食在好蔬和北投萵苣一起結帳。
+- [有機乾燥黑木耳](https://sasa11221.github.io/goodveggie-mockup/item-td-black-fungus.html)：添丁在桃園大溪種的有機黑木耳，乾燥處理，方便保存。NT$110／包，在食在好蔬和北投萵苣一起結帳。
+- [綜合菇脆餅](https://sasa11221.github.io/goodveggie-mockup/item-td-crisps.html)：添丁養生黑木耳的菇類零食。NT$140／包，在食在好蔬和北投萵苣一起結帳。
+- [特濃黑木耳露](https://sasa11221.github.io/goodveggie-mockup/item-td-fungus-drink.html)：添丁養生黑木耳的黑木耳飲品。NT$100／瓶，在食在好蔬和北投萵苣一起結帳。
+- [有機乾燥猴頭菇](https://sasa11221.github.io/goodveggie-mockup/item-td-lions-mane.html)：添丁在桃園大溪種的有機猴頭菇，乾燥處理，方便保存。NT$120／包，在食在好蔬和北投萵苣一起結帳。
+- [有機乾燥香菇](https://sasa11221.github.io/goodveggie-mockup/item-td-shiitake.html)：添丁在桃園大溪種的有機香菇，乾燥處理，方便保存。NT$130／包，在食在好蔬和北投萵苣一起結帳。
+- [五福菇XO醬](https://sasa11221.github.io/goodveggie-mockup/item-td-xo.html)：用菇做的 XO 醬。NT$150／罐，在食在好蔬和北投萵苣一起結帳。
 
 ## 12 種蔬菜
 - [芝麻葉](https://sasa11221.github.io/goodveggie-mockup/veg-arugula.html)：帶獨特芝麻香與微辛辣，是義式料理的靈魂葉菜。北投魚菜共生農場無農藥栽種。

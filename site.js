@@ -1,28 +1,45 @@
-// A 版模擬站共用腳本（示意用：購物車存在記憶體，重新整理就清空）
+// A 版模擬站共用腳本（示意用：購物車存在這台瀏覽器的 localStorage）
 (() => {
   const $ = (id) => document.getElementById(id);
+  const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const nt = (n) => Number(n).toLocaleString('zh-TW');
   // 購物車存在瀏覽器裡，重新整理或換頁都還在（正式版改存伺服器，登入後換裝置也看得到）
   const KEY = 'gv-cart-v1';
   const cart = (() => { try { const v = JSON.parse(localStorage.getItem(KEY) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } })();
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(cart)); } catch (e) {} };
   const drawer = $('drawer'), scrim = $('scrim');
+  drawer.setAttribute('role', 'dialog'); drawer.setAttribute('aria-modal', 'true');
   const open = () => { drawer.classList.add('open'); scrim.classList.add('show'); drawer.inert = false; drawer.setAttribute('aria-hidden', 'false'); setTimeout(() => $('cart-close').focus(), 50); };
   const close = () => { drawer.classList.remove('open'); scrim.classList.remove('show'); drawer.inert = true; drawer.setAttribute('aria-hidden', 'true'); $('cart-open').focus(); };
   $('cart-open').addEventListener('click', open);
   $('cart-close').addEventListener('click', close);
   scrim.addEventListener('click', close);
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && drawer.classList.contains('open')) close(); });
-  $('burger').addEventListener('click', () => {
-    const o = $('nav').classList.toggle('open');
+  document.addEventListener('keydown', (e) => {
+    if (!drawer.classList.contains('open')) return;
+    if (e.key === 'Escape') { close(); return; }
+    if (e.key !== 'Tab') return;
+    const f = [...drawer.querySelectorAll('a[href],button:not([disabled]),input,select,textarea')].filter((el) => el.offsetParent !== null);
+    if (!f.length) return;
+    if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+    else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+  });
+  const setNav = (o, refocus) => {
+    $('nav').classList.toggle('open', o);
     $('burger').setAttribute('aria-expanded', o);
     $('burger').setAttribute('aria-label', o ? '關閉選單' : '開啟選單');
-  });
+    if (!o && refocus) $('burger').focus();
+  };
+  $('burger').addEventListener('click', () => setNav(!$('nav').classList.contains('open')));
+  $('nav').addEventListener('click', (e) => { if (e.target.closest('a')) setNav(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && $('nav').classList.contains('open')) setNav(false, true); });
+  document.addEventListener('click', (e) => { if ($('nav').classList.contains('open') && !e.target.closest('#nav,#burger')) setNav(false); });
 
   function render() {
     save();
     const c = $('count'), n = cart.reduce((s, x) => s + x.qty, 0);
     if (String(n) !== c.textContent) { c.textContent = n; c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }
-    $('total').textContent = 'NT$' + cart.reduce((s, x) => s + x.qty * x.price, 0).toLocaleString() + (cart.some((x) => !x.price) ? '＋待填品項' : '');
+    window.dispatchEvent(new Event('gv-cart'));
+    $('total').textContent = 'NT$' + nt(cart.reduce((s, x) => s + x.qty * x.price, 0)) + (cart.some((x) => !x.price) ? '＋待填品項' : '');
     $('cart-open').classList.toggle('has-items', cart.length > 0);
     $('cart-open').setAttribute('aria-label', n ? `購物車，${n} 件` : '購物車');
     if (!cart.length) { $('drawer-body').innerHTML = '<p class="empty">購物車是空的。到市集挑這週採收的菜吧。</p>'; return; }
@@ -30,13 +47,13 @@
     cart.forEach((x) => (g[x.src] = g[x.src] || []).push(x));
     const full = packTotal() >= PACK_LIMIT ? `<p class="limit-note">萵苣已達每日上限 ${PACK_LIMIT} 包（每個帳號每天）。需要更多？<a href="custom.html">大量採購請找我們</a></p>` : '';
     $('drawer-body').innerHTML = full + Object.entries(g).map(([src, items]) =>
-      `<div class="group"><h3>${src}</h3>${items.map((x) => {
+      `<div class="group"><h3>${esc(src)}</h3>${items.map((x) => {
         const i = cart.indexOf(x);
         return `<div class="line" data-i="${i}">
-          <div class="line-main"><span class="line-name">${x.name}</span><span class="line-unit">${x.price ? `NT$${x.price} / 件` : '單價待填'}</span></div>
+          <div class="line-main"><span class="line-name">${esc(x.name)}</span><span class="line-unit">${x.price ? `NT$${nt(x.price)} / ${esc(x.unit || '件')}` : '單價待填'}</span></div>
           <div class="line-ctrl">
-            <div class="qty qty-sm"><button type="button" data-act="dec" aria-label="${x.name} 減少一件">−</button><span aria-live="polite">${x.qty}</span><button type="button" data-act="inc" aria-label="${x.name} 增加一件"${(isPack(x) ? packTotal() >= PACK_LIMIT : x.qty >= 10) ? ' disabled' : ''}>＋</button></div>
-            <span class="line-sum">${x.price ? `NT$${(x.qty * x.price).toLocaleString()}` : '—'}</span>
+            <div class="qty qty-sm"><button type="button" data-act="dec" aria-label="${esc(x.name)} 減少一件">−</button><span aria-live="polite">${x.qty}</span><button type="button" data-act="inc" aria-label="${esc(x.name)} 增加一件"${(isPack(x) ? packTotal() >= PACK_LIMIT : x.qty >= 10) ? ' disabled' : ''}>＋</button></div>
+            <span class="line-sum">${x.price ? `NT$${nt(x.qty * x.price)}` : '—'}</span>
             <button type="button" class="remove" data-act="del">移除</button>
           </div></div>`; }).join('')}</div>`).join('');
   }
@@ -46,8 +63,11 @@
     if (b.dataset.act === 'inc') { if (isPack(x) && packTotal() >= PACK_LIMIT) return; x.qty = Math.min(10, x.qty + 1); }
     if (b.dataset.act === 'dec') x.qty -= 1;
     if (b.dataset.act === 'del' || x.qty <= 0) {
-      b.closest('.line').classList.add('leaving');
-      setTimeout(() => { cart.splice(i, 1); render(); $('cart-close').focus(); }, 220);
+      const line = b.closest('.line');
+      cart.splice(i, 1); save();
+      drawer.querySelectorAll('.line [data-act]').forEach((el) => { el.disabled = true; });
+      line.classList.add('leaving');
+      setTimeout(() => { render(); $('cart-close').focus(); }, 220);
       return;
     }
     render();
@@ -89,8 +109,8 @@
     setTimeout(() => c.remove(), 900);
   };
 
-  window.addToCart = (name, price, src, qty = 1, img = null, pack = false) => {
-    const item = { name, price: Number(price), src, qty, pack };
+  window.addToCart = (name, price, src, qty = 1, img = null, pack = false, unit = '') => {
+    const item = { name, price: Number(price), src, qty, pack, ...(unit ? { unit } : {}) };
     if (isPack(item) && packTotal() + qty > PACK_LIMIT) {
       const room = PACK_LIMIT - packTotal();
       showPop(`<div class="pop-body"><b>已達每日訂購上限</b>
@@ -98,15 +118,26 @@
         <div class="pop-acts"><button type="button" class="btn-small" data-go>查看購物車</button><button type="button" class="pop-close" data-close>知道了</button></div>`, true);
       return false;
     }
-    const hit = cart.find((x) => x.name === name);
-    if (hit) hit.qty += qty; else cart.push(item);
+    const hit = cart.find((x) => x.name === name && x.price === item.price);
+    const had = hit ? hit.qty : 0, ITEM_MAX = 10;
+    // 這項已經 10 件：不再加，直接告訴客人已達上限
+    if (had >= ITEM_MAX) {
+      showPop(`<div class="pop-body"><b>已達上限</b><p>${esc(name)} 每次最多訂 ${ITEM_MAX} 件，購物車裡已經有 ${had} 件。</p></div>
+        <div class="pop-acts"><button type="button" class="btn-small" data-go>查看購物車</button><button type="button" class="pop-close" data-close>知道了</button></div>`, true);
+      return false;
+    }
+    const added = Math.min(ITEM_MAX, had + qty) - had;
+    if (hit) hit.qty += added; else { item.qty = added; cart.push(item); }
     render();
     fly(img);
-    const thumb = img ? `<img src="${img.currentSrc || img.src}" alt="">` : '';
+    const thumb = img ? `<img src="${esc(img.currentSrc || img.src)}" alt="">` : '';
     const rest = PACK_LIMIT - packTotal();
-    const left = isPack(item) ? `<span class="pop-left">${rest > 0 ? `今天還可以再訂 ${rest} 包萵苣` : `今天的 ${PACK_LIMIT} 包額度已訂滿`}</span>` : '';
-    setTimeout(() => showPop(`<div class="pop-item">${thumb}<div><b>已加入購物車</b><span>${name} × ${qty}</span>${left}</div></div>
-      <div class="pop-acts"><button type="button" class="btn-small" data-go>查看購物車（${cart.reduce((s, x) => s + x.qty, 0)}）</button><button type="button" class="pop-close" data-close>繼續逛</button></div>`), img ? 450 : 0);
+    const itemFull = had + added >= ITEM_MAX, packFull = isPack(item) && rest <= 0;
+    const full = itemFull || packFull;
+    const left = isPack(item) && !packFull ? `<span class="pop-left">今天還可以再訂 ${rest} 包萵苣</span>` : '';
+    const note = packFull ? `今天的 ${PACK_LIMIT} 包萵苣額度已訂滿` : itemFull ? `這項最多 ${ITEM_MAX} 件，已經訂滿` : '';
+    setTimeout(() => showPop(`<div class="pop-item">${thumb}<div><b>${full ? '已加入，已達上限' : '已加入購物車'}</b><span>${esc(name)} × ${added}${added < qty ? `（只加了 ${added} 件）` : ''}</span>${left}${note ? `<span class="pop-left pop-full">${note}</span>` : ''}</div></div>
+      <div class="pop-acts"><button type="button" class="btn-small" data-go>查看購物車（${cart.reduce((s, x) => s + x.qty, 0)}）</button><button type="button" class="pop-close" data-close>繼續逛</button></div>`, full), img ? 450 : 0);
     return true;
   };
   document.addEventListener('click', (e) => {
@@ -116,7 +147,7 @@
     const img = card ? card.querySelector('img') : null;
     const qEl = b.closest('.add-row')?.querySelector('[data-q] span');
     const n = qEl ? Number(qEl.textContent) : 1;
-    if (!addToCart(b.dataset.add, b.dataset.price, b.dataset.src, n, img, !!b.dataset.pack)) return;
+    if (!addToCart(b.dataset.add, b.dataset.price, b.dataset.src, n, img, !!b.dataset.pack, b.dataset.unit)) return;
     if (qEl) qEl.textContent = 1;
     if (b.classList.contains('added')) return;
     const t = b.textContent; b.classList.add('added'); b.textContent = '已加入';
@@ -127,6 +158,10 @@
     const st = e.target.closest('[data-step]'); if (!st) return;
     const sp = st.parentElement.querySelector('span');
     sp.textContent = Math.max(1, Math.min(10, Number(sp.textContent) + Number(st.dataset.step)));
+  });
+  window.addEventListener('storage', (e) => {
+    if (e.key !== KEY) return;
+    try { const v = JSON.parse(e.newValue || '[]'); if (Array.isArray(v)) { cart.length = 0; cart.push(...v); render(); } } catch (err) {}
   });
   render();
   // 給結帳頁用：讀購物車、送出後清空
@@ -183,53 +218,25 @@
     apply();
   }
 
-  // 首頁：大圖淡入淡出輪播（5 秒一張；滑鼠移上去暫停；減少動態時不自動播）
+  // 首頁：大圖淡入淡出輪播（5 秒一張；可按暫停、鍵盤聚焦時暫停；減少動態時不自動播）
   const hs = $('hero-show');
   if (hs) {
     const pics = [...hs.querySelectorAll('.hs-stage img')], hd = [...hs.querySelectorAll('[data-hs]')];
     let k = 0, ht = null;
     const show = (n) => {
       k = (n + pics.length) % pics.length;
-      pics.forEach((im, i) => { im.classList.toggle('is-on', i === k); if (i === k) im.loading = 'eager'; });
-      hd.forEach((d, i) => d.toggleAttribute('aria-current', i === k));
+      pics.forEach((im, i) => { const on = i === k; im.classList.toggle('is-on', on); im.setAttribute('aria-hidden', String(!on)); if (on || i === (k + 1) % pics.length) im.loading = 'eager'; });
+      hd.forEach((d, i) => { if (i === k) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
     };
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const run = () => { if (!still) { clearInterval(ht); ht = setInterval(() => show(k + 1), 5000); } };
+    let paused = still;
+    const pb = $('hs-pause');
+    const run = () => { clearInterval(ht); if (!paused) ht = setInterval(() => show(k + 1), 5000); };
+    const setPaused = (p) => { paused = p; if (pb) { pb.setAttribute('aria-pressed', String(p)); pb.setAttribute('aria-label', p ? '播放輪播' : '暫停輪播'); } run(); };
+    if (pb) pb.addEventListener('click', () => setPaused(!paused));
     hd.forEach((d) => d.addEventListener('click', () => { show(Number(d.dataset.hs)); run(); }));
-    if (!hs.classList.contains('hero2')) { hs.addEventListener('mouseenter', () => clearInterval(ht)); hs.addEventListener('mouseleave', run); }
-    pics.slice(1).forEach((im) => { im.loading = 'eager'; });
-    run();
-  }
-
-  // 首頁：合作農場輪播（6 秒換一家；滑鼠移上去或鍵盤聚焦時暫停；減少動態時不自動播）
-  const fs = $('fs');
-  if (fs) {
-    const track = $('fs-track'), slides = [...track.children], dots = [...document.querySelectorAll('.fs-dot')];
-    let at = 0, timer = null;
-    const go = (n) => {
-      at = (n + slides.length) % slides.length;
-      track.style.transform = `translateX(-${at * 100}%)`;
-      slides.forEach((sl, k) => { sl.inert = k !== at; sl.setAttribute('aria-hidden', k !== at); });
-      dots.forEach((d, k) => d.toggleAttribute('aria-current', k === at));
-      $('fs-now').textContent = at + 1;
-    };
-    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const play = () => { if (!calm) { clearInterval(timer); timer = setInterval(() => go(at + 1), 6000); } };
-    const stop = () => clearInterval(timer);
-    document.querySelectorAll('[data-fs]').forEach((b) => b.addEventListener('click', () => { go(at + (b.dataset.fs === 'next' ? 1 : -1)); play(); }));
-    dots.forEach((d) => d.addEventListener('click', () => { go(Number(d.dataset.fsTo)); play(); }));
-    const box = fs.closest('section');
-    box.addEventListener('mouseenter', stop); box.addEventListener('mouseleave', play);
-    box.addEventListener('focusin', stop); box.addEventListener('focusout', play);
-    let x0 = null;
-    fs.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; stop(); }, { passive: true });
-    fs.addEventListener('touchend', (e) => {
-      if (x0 === null) return;
-      const dx = e.changedTouches[0].clientX - x0; x0 = null;
-      if (Math.abs(dx) > 40) go(at + (dx < 0 ? 1 : -1));
-      play();
-    });
-    go(0); play();
+    hs.addEventListener('focusin', () => clearInterval(ht)); hs.addEventListener('focusout', run);
+    show(0); setPaused(paused);
   }
 
   // 商品頁：縮圖、數量、加入購物車
@@ -240,22 +247,12 @@
     }));
     const bb = $('buy'), unitOf = () => Number(bb.dataset.price);
     const upd = () => { const n = Math.max(1, Math.min(10, parseInt($('qty').value, 10) || 1)); $('qty').value = n; if ($('sum')) $('sum').textContent = unitOf() * n; };
-    // 搭配包：這次買一包／每週固定一包
-    if ($('plan')) {
-      const base = { name: bb.dataset.name, price: bb.dataset.price };
-      $('plan').addEventListener('change', (e) => {
-        const wk = e.target.value === 'weekly';
-        bb.dataset.name = wk ? base.name + '（每週固定）' : base.name;
-        bb.dataset.price = wk ? e.target.dataset.price : base.price;
-        bb.innerHTML = (wk ? '開始每週固定' : '加入購物車') + '　NT$<span id="sum"></span>' + (wk ? '／週' : '');
-        upd();
-      });
-    }
     $('minus').onclick = () => { $('qty').value--; upd(); };
     $('plus').onclick = () => { $('qty').value++; upd(); };
     $('qty').oninput = upd;
     bb.onclick = () => {
-      if (!addToCart(bb.dataset.name, unitOf(), bb.dataset.src || '食在好蔬 北投農場', Number($('qty').value), $('main-img'), !!bb.dataset.pack)) return;
+      if (bb.classList.contains('added')) return;
+      if (!addToCart(bb.dataset.name, unitOf(), bb.dataset.src || '食在好蔬 北投農場', Number($('qty').value), $('main-img'), !!bb.dataset.pack, bb.dataset.unit)) return;
       const t = bb.innerHTML; bb.classList.add('added'); bb.textContent = '已加入購物車';
       setTimeout(() => { bb.classList.remove('added'); bb.innerHTML = t; $('qty').value = 1; upd(); }, 1600); };
   }

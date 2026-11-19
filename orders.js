@@ -4,7 +4,7 @@
   const OKEY = 'gv-orders-v2', UKEY = 'gv-user-v1';
   const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
   const store = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
-  const money = (n) => 'NT$' + n.toLocaleString();
+  const money = (n) => 'NT$' + Number(n).toLocaleString('zh-TW');
   const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const sumOf = (items) => items.reduce((s, x) => s + x.qty * x.price, 0);
   const hasTbd = (items) => items.some((x) => !x.price);
@@ -17,7 +17,8 @@
   const form = $('co');
   if (form) {
     const items = window.gvCart.items;
-    if (!items.length) { form.hidden = true; $('co-empty').hidden = false; return; }
+    const emptyCheck = () => { const e = !items.length; form.hidden = e; $('co-empty').hidden = !e; return e; };
+    if (emptyCheck()) return;
 
     // 登入（示意）
     const showUser = () => {
@@ -35,8 +36,8 @@
         }
       }
     };
-    $('line-login').onclick = () => { store(UKEY, { name: '王小明', phone: '' }); $('login-err').hidden = true; showUser(); window.dispatchEvent(new Event('gv-user')); $('f-phone').focus(); };
-    $('logout').onclick = () => { localStorage.removeItem(UKEY); $('f-name').value = ''; $('f-phone').value = ''; showUser(); window.dispatchEvent(new Event('gv-user')); };
+    $('line-login').onclick = () => { store(UKEY, { ...(load(UKEY, null) || {}), name: '王小明' }); $('login-err').hidden = true; showUser(); window.dispatchEvent(new Event('gv-user')); $('f-phone').focus(); };
+    $('logout').onclick = () => { try { localStorage.removeItem(UKEY); } catch (e) {} $('f-name').value = ''; $('f-phone').value = ''; showUser(); window.dispatchEvent(new Event('gv-user')); };
     // 標題列登入／登出時，結帳頁跟著更新
     window.addEventListener('gv-user', () => { if (!load(UKEY, null)) { $('f-name').value = ''; $('f-phone').value = ''; } else $('login-err').hidden = true; showUser(); paint(); });
     showUser();
@@ -65,9 +66,11 @@
       if (e.target.id === 'f-org' && e.target.value.trim()) $('org-err').hidden = true;
     });
     paint();
+    window.addEventListener('gv-cart', () => { if (!emptyCheck()) paint(); });
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      if (emptyCheck()) return;
       const u = load(UKEY, null);
       const phone = $('f-phone').value.replace(/\D/g, ''), addr = $('f-addr').value.trim(), team = isTeam(), org = $('f-org').value.trim();
       const day = form.querySelector('[name=day]:checked');
@@ -75,16 +78,17 @@
       $('login-err').hidden = !!u; if (!u) bad.push($('line-login'));
       if (u) {
         const ok = /^09\d{8}$/.test(phone); $('phone-err').hidden = ok; $('f-phone').setAttribute('aria-invalid', !ok);
-        if (!$('f-name').value.trim()) bad.push($('f-name')); if (!ok) bad.push($('f-phone'));
+        const nameOk = !!$('f-name').value.trim(); $('f-name').setAttribute('aria-invalid', !nameOk); if ($('name-err')) $('name-err').hidden = nameOk;
+        if (!nameOk) bad.push($('f-name')); if (!ok) bad.push($('f-phone'));
         $('org-err').hidden = !team || !!org; if (team && !org) bad.push($('f-org'));
       }
       $('addr-err').hidden = !!addr; if (!addr) bad.push($('f-addr'));
       $('day-err').hidden = !!day; if (!day) bad.push(form.querySelector('[name=day]'));
       if (bad.length) { bad[0].scrollIntoView({ behavior: 'smooth', block: 'center' }); bad[0].focus({ preventScroll: true }); return; }
 
-      store(UKEY, { ...u, phone, addr, ...(team ? { buyer: 'team', org, tax: $('f-tax').value.trim() } : {}) });
+      store(UKEY, { ...u, phone, addr, buyer: team ? 'team' : 'personal', org: team ? org : '', tax: team ? $('f-tax').value.trim() : '' });
       const now = new Date(), pad = (n) => String(n).padStart(2, '0');
-      const id = `GV${String(now.getFullYear()).slice(2)}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${Math.floor(Math.random() * 900 + 100)}`;
+      const id = `GV${String(now.getFullYear()).slice(2)}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${String(now.getHours()).padStart(2, '0')}${pad(now.getMinutes())}${pad(now.getSeconds())}${Math.floor(Math.random() * 90 + 10)}`;
       const orders = load(OKEY, []);
       orders.unshift({ id, created: now.toISOString(), status: 'pending', items: items.map((x) => ({ ...x })),
         name: $('f-name').value.trim(), phone, addr, day: day.value,
@@ -109,17 +113,17 @@
     const h = gvHarvests(1)[0], past = new Date(h); past.setDate(past.getDate() - 7);
     orders = [
       { id: 'GV-示意-002', demo: true, status: 'ready', created: new Date().toISOString(), addr: '台北市北投區學園路 1 號', day: h.toISOString(), pay: '銀行轉帳', name: '王小明', phone: '0912345678', team: null,
-        items: [{ name: '農場搭配萵苣包', price: 200, qty: 2, src: '食在好蔬 北投農場' }, { name: '有機鮮猴頭菇', price: 220, qty: 1, src: '添丁養生黑木耳（桃園大溪）' }] },
+        items: [{ name: '農場搭配萵苣包', price: 200, qty: 2, src: '食在好蔬 北投農場', pack: true }, { name: '有機乾燥猴頭菇', price: 120, qty: 1, src: '添丁養生黑木耳（桃園大溪）' }] },
       { id: 'GV-示意-001', demo: true, status: 'done', created: past.toISOString(), addr: '台北市內湖區瑞光路 100 號 8 樓', day: past.toISOString(), pay: '開發票請款', name: '王小明', phone: '0912345678',
         team: { org: '好日子設計有限公司', tax: '12345678', split: true, list: '' },
-        items: [{ name: '農場搭配萵苣包', price: 200, qty: 12, src: '食在好蔬 北投農場' }, { name: '有機乾燥香菇（一包）', price: 380, qty: 4, src: '添丁養生黑木耳（桃園大溪）' }] },
+        items: [{ name: '農場搭配萵苣包', price: 200, qty: 10, src: '食在好蔬 北投農場', pack: true }, { name: '有機乾燥香菇', price: 130, qty: 4, src: '添丁養生黑木耳（桃園大溪）' }] },
     ];
     store(OKEY, orders);
   }
 
   let tab = 'open';
   const card = (o) => {
-    const [label, at, cls] = STATUS[o.status];
+    const [label, at, cls] = STATUS[o.status] || ['處理中', 0, 'wait'];
     const day = new Date(o.day), t = sumOf(o.items);
     const steps = o.status === 'cancel' ? '' : `<ol class="od-steps">${STEPS.map((s, i) => `<li class="${i <= at ? 'is-on' : ''}${i === at ? ' is-now' : ''}">${s}</li>`).join('')}</ol>`;
     const acts = [];
@@ -154,7 +158,7 @@
     const b = e.target.closest('[data-act]'); if (!b) return;
     const el = b.closest('.od-card'), o = orders.find((x) => x.id === el.dataset.id);
     const act = b.dataset.act;
-    if (act === 'again') { o.items.forEach((x) => addToCart(x.name, x.price, x.src, Math.min(x.qty, 10), null, x.src.includes('食在好蔬') && /萵苣/.test(x.name))); return; }
+    if (act === 'again') { o.items.forEach((x) => addToCart(x.name, x.price, x.src, Math.min(x.qty, 10), null, !!x.pack, x.unit)); return; }
     if (act === 'cancel' && !confirm(`確定要取消訂單 ${o.id} 嗎？`)) return;
     o.status = { cancel: 'cancel', confirm: 'ready', pick: 'done' }[act];
     store(OKEY, orders); paint();

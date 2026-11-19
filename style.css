@@ -576,7 +576,7 @@ section.notes{padding:28px 32px}
 .od-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px 28px}
 .od-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.od-head h2{font:700 1.1rem var(--sans);margin:0;letter-spacing:.02em}.od-head small{color:var(--ink2);font-size:14px}
 .od-pill{flex:none;font-size:14px;font-weight:500;padding:3px 12px;border-radius:99px;background:var(--bg);color:var(--ink2)}
-.st-ok .od-pill{background:var(--leaf);color:#fff}.st-wait .od-pill{background:#fff3c4;color:#6b5600}.st-off .od-pill{background:#eee;color:#777}
+.st-ok .od-pill{background:var(--leaf);color:#fff}.st-wait .od-pill{background:#fff3c4;color:#6b5600}.st-off .od-pill{background:#eee;color:#555}
 .st-off{opacity:.8}
 .od-steps{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);margin:20px 0 4px;padding:0;font-size:13px;color:var(--ink2);text-align:center}
 .od-steps li{position:relative;padding-top:20px}
@@ -1030,13 +1030,7 @@ html,body{overflow-x:clip}
 .buy-ways .way{display:flex;flex-direction:column}.buy-ways .way .text-link{margin-top:auto;align-self:flex-start}
 @media(max-width:1000px){.buy-ways{grid-template-columns:1fr}}
 
-/* ── 頁尾品牌描述 ── */
-.site-foot .foot-about{color:#e3e9df;margin:8px 0 10px;max-width:30em;line-height:1.7}
 
-/* ── 商品頁：評價（目前是空的） ── */
-.reviews{margin:8px 0 40px;padding-top:28px;border-top:1px solid var(--line)}
-.rv-empty{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:22px 24px}
-.rv-empty p{margin:0 0 12px;color:var(--ink2)}
 
 /* ── 好蔬知識 ── */
 .guide{max-width:820px;padding-bottom:24px}
@@ -1114,6 +1108,44 @@ html,body{overflow-x:clip}
   .ch-turn strong{font-size:min(1.4rem,calc(100cqi / 11.6))}
   .ch-turn strong .h span{display:block}
 }
+
+/* ── 審查修正 ── */
+.pic-tag.ok{background:var(--leaf);color:#fff}
+.hs-dots button[data-hs]{position:relative}
+.hs-dots button[data-hs]::after{content:"";position:absolute;inset:-8px}
+.hs-pause{width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;display:inline-grid;place-items:center;cursor:pointer;margin-right:6px;padding:0}
+.hs-pause svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.hs-pause .i-play{display:none;fill:currentColor;stroke:none}
+.hs-pause[aria-pressed="true"] .i-play{display:inline}.hs-pause[aria-pressed="true"] .i-pause{display:none}
+.hs-pause:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.g-row dt{display:contents}
+.g-row dt span{font-weight:700;color:var(--ink)}
+.co-err{color:var(--beet);font-size:14px;margin:4px 0 0}
+.hs-dots{align-items:center}
+.hs-dots .hs-pause{width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.28);opacity:1;flex:none}
+.hs-dots .hs-pause:hover{background:rgba(0,0,0,.45)}
+.logo img{height:auto;aspect-ratio:1}
+.pop-full{color:var(--beet)!important;font-weight:500}
+
+/* ── 首頁大標（定案：原對照版）：主打「當天採收」，品牌名縮小、按鈕改實心 ── */
+.hero2 .brand-h1{font-size:clamp(1rem,1.6vw,1.25rem);letter-spacing:.24em;margin-bottom:14px;opacity:.92}
+.hero2-sub{font-size:clamp(2.1rem,5.2vw,3.9rem);line-height:1.25;max-width:14em;margin-bottom:18px}
+.hero2 .btn-glass{background:var(--leaf);border-color:var(--leaf);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 10px 24px -12px rgba(0,0,0,.5)}
+.hero2 .btn-glass:hover{background:var(--leaf2)}
+@media(max-width:360px){.hero2 .brand-h1{font-size:.95rem}.hero2-sub{font-size:1.9rem}}
+@media(max-height:520px) and (orientation:landscape){.hero2-sub{font-size:1.6rem;margin-bottom:10px}.hero2 .brand-h1{margin-bottom:6px}}
+
+/* ── LINE：改用官方圖示 ── */
+img.line-ico{display:block;width:22px;height:22px;border-radius:6px;flex:none}
+.line-login img.line-ico{box-shadow:0 0 0 1.5px #fff}
+.cbtn img.line-ico{width:24px;height:24px}
+.foot-line img.line-ico{width:20px;height:20px}
+.acc-me small img.line-ico{width:14px;height:14px;border-radius:4px;display:inline-block}
+@media(max-width:900px){
+  .line-login{background:transparent!important;width:44px;padding:0}
+  .line-login img.line-ico{width:34px;height:34px;border-radius:9px;box-shadow:none}
+}
+.line-login img.line-ico{box-shadow:none}
 
 /* 對外版本：保險起見，任何漏掉的待辦都不顯示 */
 .tbd,.mockbar,.mock-only{display:none!important}
