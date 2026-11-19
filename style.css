@@ -1025,5 +1025,10 @@ html,body{overflow-x:clip}
 @media(max-width:900px){.foot-row{grid-template-columns:1fr 1fr}}
 .co-biz{margin:14px 0 0}.co-biz a{margin-left:6px;font-weight:500}
 
+/* ── 購物說明：三種買法 ── */
+.buy-ways{grid-template-columns:repeat(3,minmax(0,1fr))}
+.buy-ways .way{display:flex;flex-direction:column}.buy-ways .way .text-link{margin-top:auto;align-self:flex-start}
+@media(max-width:1000px){.buy-ways{grid-template-columns:1fr}}
+
 /* 對外版本：保險起見，任何漏掉的待辦都不顯示 */
 .tbd,.mockbar,.mock-only{display:none!important}

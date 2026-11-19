@@ -28,7 +28,7 @@
     if (!cart.length) { $('drawer-body').innerHTML = '<p class="empty">購物車是空的。到市集挑這週採收的菜吧。</p>'; return; }
     const g = {};
     cart.forEach((x) => (g[x.src] = g[x.src] || []).push(x));
-    const full = packTotal() >= PACK_LIMIT ? `<p class="limit-note">萵苣已達每日上限 ${PACK_LIMIT} 包（每個帳號每天）。</p>` : '';
+    const full = packTotal() >= PACK_LIMIT ? `<p class="limit-note">萵苣已達每日上限 ${PACK_LIMIT} 包（每個帳號每天）。需要更多？<a href="custom.html">大量採購請找我們</a></p>` : '';
     $('drawer-body').innerHTML = full + Object.entries(g).map(([src, items]) =>
       `<div class="group"><h3>${src}</h3>${items.map((x) => {
         const i = cart.indexOf(x);
