@@ -18,7 +18,7 @@
   if (form) {
     const items = window.gvCart.items;
     const emptyCheck = () => { const e = !items.length; form.hidden = e; $('co-empty').hidden = !e; return e; };
-    if (emptyCheck()) return;
+    if (emptyCheck()) { window.addEventListener('gv-cart', () => { if (items.length) location.reload(); }); return; }
 
     // 登入（示意）
     const showUser = () => {
@@ -158,7 +158,7 @@
     const b = e.target.closest('[data-act]'); if (!b) return;
     const el = b.closest('.od-card'), o = orders.find((x) => x.id === el.dataset.id);
     const act = b.dataset.act;
-    if (act === 'again') { o.items.forEach((x) => addToCart(x.name, x.price, x.src, Math.min(x.qty, 10), null, !!x.pack, x.unit)); return; }
+    if (act === 'again') { addManyToCart(o.items.map((x) => ({ ...x, qty: Math.min(x.qty, 10) }))); return; }
     if (act === 'cancel' && !confirm(`確定要取消訂單 ${o.id} 嗎？`)) return;
     o.status = { cancel: 'cancel', confirm: 'ready', pick: 'done' }[act];
     store(OKEY, orders); paint();

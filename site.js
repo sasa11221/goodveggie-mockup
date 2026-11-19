@@ -34,7 +34,7 @@
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && $('nav').classList.contains('open')) setNav(false, true); });
   document.addEventListener('click', (e) => { if ($('nav').classList.contains('open') && !e.target.closest('#nav,#burger')) setNav(false); });
 
-  function render() {
+  function render(listToo = true) {
     save();
     const c = $('count'), n = cart.reduce((s, x) => s + x.qty, 0);
     if (String(n) !== c.textContent) { c.textContent = n; c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }
@@ -42,6 +42,7 @@
     $('total').textContent = 'NT$' + nt(cart.reduce((s, x) => s + x.qty * x.price, 0)) + (cart.some((x) => !x.price) ? '＋待填品項' : '');
     $('cart-open').classList.toggle('has-items', cart.length > 0);
     $('cart-open').setAttribute('aria-label', n ? `購物車，${n} 件` : '購物車');
+    if (!listToo) return;
     if (!cart.length) { $('drawer-body').innerHTML = '<p class="empty">購物車是空的。到市集挑這週採收的菜吧。</p>'; return; }
     const g = {};
     cart.forEach((x) => (g[x.src] = g[x.src] || []).push(x));
@@ -57,17 +58,25 @@
             <button type="button" class="remove" data-act="del">移除</button>
           </div></div>`; }).join('')}</div>`).join('');
   }
+  const say = document.createElement('p'); say.className = 'sr-only'; say.setAttribute('aria-live', 'polite');
+  drawer.appendChild(say);
+  let removing = false;
   $('drawer-body').addEventListener('click', (e) => {
-    const b = e.target.closest('[data-act]'); if (!b) return;
+    const b = e.target.closest('[data-act]'); if (!b || removing) return;
     const i = Number(b.closest('.line').dataset.i), x = cart[i];
     if (b.dataset.act === 'inc') { if (isPack(x) && packTotal() >= PACK_LIMIT) return; x.qty = Math.min(10, x.qty + 1); }
     if (b.dataset.act === 'dec') x.qty -= 1;
     if (b.dataset.act === 'del' || x.qty <= 0) {
       const line = b.closest('.line');
-      cart.splice(i, 1); save();
-      drawer.querySelectorAll('.line [data-act]').forEach((el) => { el.disabled = true; });
+      cart.splice(i, 1); removing = true;
+      render(false);                       // 數量、總計立刻更新
+      say.textContent = `已移除 ${x.name}`;
       line.classList.add('leaving');
-      setTimeout(() => { render(); $('cart-close').focus(); }, 220);
+      setTimeout(() => {
+        removing = false; render();
+        const next = $('drawer-body').querySelector(`.line[data-i="${Math.min(i, cart.length - 1)}"] [data-act="del"]`);
+        (next || $('cart-close')).focus();
+      }, 220);
       return;
     }
     render();
@@ -147,12 +156,28 @@
     const img = card ? card.querySelector('img') : null;
     const qEl = b.closest('.add-row')?.querySelector('[data-q] span');
     const n = qEl ? Number(qEl.textContent) : 1;
+    if (b.classList.contains('added')) return;
     if (!addToCart(b.dataset.add, b.dataset.price, b.dataset.src, n, img, !!b.dataset.pack, b.dataset.unit)) return;
     if (qEl) qEl.textContent = 1;
-    if (b.classList.contains('added')) return;
     const t = b.textContent; b.classList.add('added'); b.textContent = '已加入';
     setTimeout(() => { b.classList.remove('added'); b.textContent = t; }, 1400);
   });
+  window.addManyToCart = (list) => {
+    let ok = 0; const skipped = [];
+    list.forEach((x) => {
+      const hit = cart.find((y) => y.name === x.name && y.price === Number(x.price));
+      const had = hit ? hit.qty : 0;
+      let room = 10 - had;
+      if (x.pack) room = Math.min(room, PACK_LIMIT - packTotal());
+      const n = Math.min(room, x.qty);
+      if (n <= 0) { skipped.push(x.name); return; }
+      if (hit) hit.qty += n; else cart.push({ name: x.name, price: Number(x.price), src: x.src, qty: n, pack: !!x.pack, ...(x.unit ? { unit: x.unit } : {}) });
+      ok += 1; if (n < x.qty) skipped.push(`${x.name}（只加了 ${n} 件）`);
+    });
+    render();
+    showPop(`<div class="pop-body"><b>${ok ? `已加入 ${ok} 項商品` : '沒有加入任何商品'}</b>${skipped.length ? `<p class="pop-full">已達上限，以下沒有全部加入：${skipped.map(esc).join('、')}</p>` : ''}</div>
+      <div class="pop-acts"><button type="button" class="btn-small" data-go>查看購物車（${cart.reduce((s, x) => s + x.qty, 0)}）</button><button type="button" class="pop-close" data-close>知道了</button></div>`, skipped.length > 0);
+  };
   // 卡片上的數量加減
   document.addEventListener('click', (e) => {
     const st = e.target.closest('[data-step]'); if (!st) return;
@@ -198,7 +223,7 @@
       const kw = norm(q.value);
       let n = 0;
       cards.forEach((c) => {
-        const hit = !kw || norm(c.textContent).includes(kw);
+        const hit = !kw || norm((c.querySelector('h3')?.textContent || '') + (c.querySelector('.src')?.textContent || '')).includes(kw);
         const ok = hit && src.includes(c.dataset.src) && cat.includes(c.dataset.cat);
         c.hidden = !ok; n += ok;
       });
@@ -214,7 +239,20 @@
       fbtn.setAttribute('aria-expanded', o);
     });
     const qs = new URLSearchParams(location.search).get('src');
-    if (qs) document.querySelectorAll('input[name=src]').forEach((i) => { i.checked = qs === 'farm' ? i.value !== 'own' : i.value === qs; });
+    const known = [...document.querySelectorAll('input[name=src]')].map((i) => i.value);
+    if (qs && (qs === 'farm' || known.includes(qs))) document.querySelectorAll('input[name=src]').forEach((i) => { i.checked = qs === 'farm' ? i.value !== 'own' : i.value === qs; });
+    // 排序
+    const sortSel = document.querySelector('select[name=sort], #sort'), grid = $('pgrid');
+    if (sortSel && grid) {
+      const orig = [...cards];
+      const price = (c) => Number(c.querySelector('[data-price]')?.dataset.price || 0);
+      sortSel.addEventListener('change', () => {
+        const v = sortSel.value; let list = [...orig];
+        if (/low|asc|便宜|低/.test(v)) list.sort((a, b) => price(a) - price(b));
+        else if (/high|desc|貴|高/.test(v)) list.sort((a, b) => price(b) - price(a));
+        list.forEach((c) => grid.appendChild(c));
+      });
+    }
     apply();
   }
 
@@ -225,13 +263,13 @@
     let k = 0, ht = null;
     const show = (n) => {
       k = (n + pics.length) % pics.length;
-      pics.forEach((im, i) => { const on = i === k; im.classList.toggle('is-on', on); im.setAttribute('aria-hidden', String(!on)); if (on || i === (k + 1) % pics.length) im.loading = 'eager'; });
+      pics.forEach((im, i) => { const on = i === k; im.classList.toggle('is-on', on); im.setAttribute('aria-hidden', String(!on)); if (on || i === (k + 1) % pics.length) { im.loading = 'eager'; if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); } } });
       hd.forEach((d, i) => { if (i === k) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
     };
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let paused = still;
     const pb = $('hs-pause');
-    const run = () => { clearInterval(ht); if (!paused) ht = setInterval(() => show(k + 1), 5000); };
+    const run = () => { clearInterval(ht); if (!paused && !hs.contains(document.activeElement)) ht = setInterval(() => show(k + 1), 5000); };
     const setPaused = (p) => { paused = p; if (pb) { pb.setAttribute('aria-pressed', String(p)); pb.setAttribute('aria-label', p ? '播放輪播' : '暫停輪播'); } run(); };
     if (pb) pb.addEventListener('click', () => setPaused(!paused));
     hd.forEach((d) => d.addEventListener('click', () => { show(Number(d.dataset.hs)); run(); }));
@@ -246,7 +284,7 @@
       document.querySelectorAll('.thumbs button').forEach((x) => x.setAttribute('aria-pressed', x === b));
     }));
     const bb = $('buy'), unitOf = () => Number(bb.dataset.price);
-    const upd = () => { const n = Math.max(1, Math.min(10, parseInt($('qty').value, 10) || 1)); $('qty').value = n; if ($('sum')) $('sum').textContent = unitOf() * n; };
+    const upd = () => { const n = Math.max(1, Math.min(10, parseInt($('qty').value, 10) || 1)); $('qty').value = n; if ($('sum')) $('sum').textContent = nt(unitOf() * n); };
     $('minus').onclick = () => { $('qty').value--; upd(); };
     $('plus').onclick = () => { $('qty').value++; upd(); };
     $('qty').oninput = upd;
@@ -262,6 +300,7 @@
   const getUser = () => { try { return JSON.parse(localStorage.getItem(UKEY)); } catch (e) { return null; } };
   const loginBtn = $('line-login-h'), menu = $('user-menu'), chip = $('user-chip'), upop = $('user-pop');
   if (loginBtn && menu) {
+    loginBtn.setAttribute('aria-label', 'LINE 登入');
     const paintUser = () => {
       const u = getUser();
       loginBtn.hidden = !!u; menu.hidden = !u;

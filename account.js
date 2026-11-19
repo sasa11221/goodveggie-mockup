@@ -28,7 +28,7 @@
       const total = o.items.reduce((s, x) => s + x.qty * x.price, 0);
       const names = o.items.map((x) => x.name).join('、');
       return `<li><a href="orders.html"><span><b>${esc(o.id)}</b><small>${esc(names.length > 26 ? names.slice(0, 26) + '…' : names)}</small></span>
-        <span class="amt">NT$${total.toLocaleString()}</span><span class="st-${cls}"><span class="od-pill">${label}</span></span></a></li>`;
+        <span class="amt">NT$${total.toLocaleString('zh-TW')}</span><span class="st-${cls}"><span class="od-pill">${label}</span></span></a></li>`;
     }).join('') : '<li class="empty">還沒有訂單。<a href="shop.html">去市集挑菜</a></li>';
   };
 
