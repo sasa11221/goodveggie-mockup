@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /account.html
+Disallow: /checkout.html
+Disallow: /orders.html
+
+Sitemap: https://sasa11221.github.io/goodveggie-mockup/sitemap.xml

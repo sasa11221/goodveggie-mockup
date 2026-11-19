@@ -255,7 +255,7 @@
     $('plus').onclick = () => { $('qty').value++; upd(); };
     $('qty').oninput = upd;
     bb.onclick = () => {
-      if (!addToCart(bb.dataset.name, unitOf(), '食在好蔬 北投農場', Number($('qty').value), $('main-img'), !!bb.dataset.pack)) return;
+      if (!addToCart(bb.dataset.name, unitOf(), bb.dataset.src || '食在好蔬 北投農場', Number($('qty').value), $('main-img'), !!bb.dataset.pack)) return;
       const t = bb.innerHTML; bb.classList.add('added'); bb.textContent = '已加入購物車';
       setTimeout(() => { bb.classList.remove('added'); bb.innerHTML = t; $('qty').value = 1; upd(); }, 1600); };
   }
