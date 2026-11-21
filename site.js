@@ -47,16 +47,18 @@
     const g = {};
     cart.forEach((x) => (g[x.src] = g[x.src] || []).push(x));
     const full = packTotal() >= PACK_LIMIT ? `<p class="limit-note">萵苣已達每日上限 ${PACK_LIMIT} 包（每個帳號每天）。需要更多？<a href="custom.html">大量採購請找我們</a></p>` : '';
-    $('drawer-body').innerHTML = full + Object.entries(g).map(([src, items]) =>
+    const order = (src) => (src.includes('食在好蔬') ? '0' : '1') + src;  // 分組順序固定：自家農場在前，其餘依名稱
+    $('drawer-body').innerHTML = full + Object.entries(g).sort((a, b) => order(a[0]).localeCompare(order(b[0]), 'zh-Hant')).map(([src, items]) =>
       `<div class="group"><h3>${esc(src)}</h3>${items.map((x) => {
         const i = cart.indexOf(x);
         return `<div class="line" data-i="${i}">
-          <div class="line-main"><span class="line-name">${esc(x.name)}</span><span class="line-unit">${x.price ? `NT$${nt(x.price)} / ${esc(x.unit || '件')}` : '單價待填'}</span></div>
+          ${photoOf(x) ? `<img class="line-thumb" src="${esc(photoOf(x))}" alt="" loading="lazy">` : '<span class="line-thumb line-thumb-none" aria-hidden="true"></span>'}
+          <div class="line-body"><div class="line-main"><span class="line-name">${esc(x.name)}</span><span class="line-unit">${x.price ? `NT$${nt(x.price)} / ${esc(x.unit || '件')}` : '單價待填'}</span></div>
           <div class="line-ctrl">
             <div class="qty qty-sm"><button type="button" data-act="dec" aria-label="${esc(x.name)} 減少一件">−</button><span aria-live="polite">${x.qty}</span><button type="button" data-act="inc" aria-label="${esc(x.name)} 增加一件"${(isPack(x) ? packTotal() >= PACK_LIMIT : x.qty >= 10) ? ' disabled' : ''}>＋</button></div>
             <span class="line-sum">${x.price ? `NT$${nt(x.qty * x.price)}` : '—'}</span>
             <button type="button" class="remove" data-act="del">移除</button>
-          </div></div>`; }).join('')}</div>`).join('');
+          </div></div></div>`; }).join('')}</div>`).join('');
   }
   const say = document.createElement('p'); say.className = 'sr-only'; say.setAttribute('aria-live', 'polite');
   drawer.appendChild(say);
@@ -70,12 +72,14 @@
       const line = b.closest('.line');
       cart.splice(i, 1); removing = true;
       render(false);                       // 數量、總計立刻更新
-      say.textContent = `已移除 ${x.name}`;
+      say.textContent = ''; setTimeout(() => { say.textContent = `已移除 ${x.name}`; }, 30);
+      const lines = [...$('drawer-body').querySelectorAll('.line')], pos = lines.indexOf(line);
       line.classList.add('leaving');
       setTimeout(() => {
         removing = false; render();
-        const next = $('drawer-body').querySelector(`.line[data-i="${Math.min(i, cart.length - 1)}"] [data-act="del"]`);
-        (next || $('cart-close')).focus();
+        if (!drawer.classList.contains('open')) return;
+        const now = [...$('drawer-body').querySelectorAll('.line [data-act="del"]')];
+        (now[Math.min(pos, now.length - 1)] || $('cart-close')).focus();
       }, 220);
       return;
     }
@@ -85,6 +89,10 @@
   });
   // ── 每日上限：每個帳號每天最多 10 包萵苣（後端仍會再檢查）──
   const PACK_LIMIT = 10;
+  // 商品照片（示意：正式版由後台商品資料提供）
+  const PHOTO = {"五福XO醬":"img/farms/tianding/xo-sauce.jpg","有機乾燥猴頭菇":"img/farms/tianding/dried-lions-mane.jpg","有機乾燥香菇":"img/farms/tianding/dried-shiitake.jpg","有機乾燥黑木耳":"img/farms/tianding/dried-black-fungus.jpg","森川捲葉苦苣（一包）":"img/farms/morikawa/frisee-1.jpg","森川紅綠橡木萵苣混合包":"img/farms/morikawa/oak-mix-1.jpg","森川綠皺葉萵苣（一包）":"img/farms/morikawa/curly-1.jpg","特濃黑木耳露":"img/farms/tianding/fungus-drink.jpg","甜脆萵苣（一包）":"img/menu/sweet-crisp-1.jpg","甜蘿蔓萵苣（一包）":"img/menu/sweet-romaine-1.jpg","皺葉萵苣（一包）":"img/menu/frilly-1.jpg","紅奶油萵苣（一包）":"img/menu/red-butter-1.jpg","紅橡木萵苣（一包）":"img/menu/red-oak-1.jpg","紅火焰萵苣（一包）":"img/menu/red-flame-1.jpg","綜合菇脆餅":"img/farms/tianding/mushroom-crisps.jpg","綠奶油萵苣（一包）":"img/menu/green-butter-1.jpg","綠橡木萵苣（一包）":"img/menu/green-oak-1.jpg","綠火焰萵苣（一包）":"img/menu/green-flame-1.jpg","羽衣甘藍":"img/menu/kale-1.jpg","芝麻葉":"img/menu/arugula-1.jpg","蘿蔓萵苣（一包）":"img/menu/romaine-1.jpg","農場搭配萵苣包":"img/menu/frilly-2.jpg"};
+  window.gvPhotoOf = (x) => photoOf(x);
+  const photoOf = (x) => x.thumb || PHOTO[x.name] || PHOTO[x.name.replace(/（.*?）$/, '')] || (window.gvCatalog ? (gvCatalog.products(true).find((p) => p.cart === x.name) || {}).img : '') || '';
   const isPack = (x) => !!x.pack;
   const packTotal = () => cart.filter(isPack).reduce((s, x) => s + x.qty, 0);
 
@@ -103,7 +111,7 @@
   pop.addEventListener('mouseenter', () => clearTimeout(popTimer));
   pop.addEventListener('mouseleave', () => { popTimer = setTimeout(hidePop, 1500); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hidePop(); });
-  document.addEventListener('click', (e) => { if (!pop.contains(e.target) && !e.target.closest('[data-add],#buy')) hidePop(); });
+  document.addEventListener('click', (e) => { if (!pop.contains(e.target) && !e.target.closest('[data-add],#buy,[data-act="again"]')) hidePop(); });
 
   const fly = (img) => {
     if (!img || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -119,7 +127,8 @@
   };
 
   window.addToCart = (name, price, src, qty = 1, img = null, pack = false, unit = '') => {
-    const item = { name, price: Number(price), src, qty, pack, ...(unit ? { unit } : {}) };
+    const pic = img ? (img.getAttribute('src') || '') : '';
+    const item = { name, price: Number(price), src, qty, pack, ...(unit ? { unit } : {}), ...(pic && !pic.startsWith('data:') ? { thumb: pic } : {}) };
     if (isPack(item) && packTotal() + qty > PACK_LIMIT) {
       const room = PACK_LIMIT - packTotal();
       showPop(`<div class="pop-body"><b>已達每日訂購上限</b>
@@ -159,8 +168,8 @@
     if (b.classList.contains('added')) return;
     if (!addToCart(b.dataset.add, b.dataset.price, b.dataset.src, n, img, !!b.dataset.pack, b.dataset.unit)) return;
     if (qEl) qEl.textContent = 1;
-    const t = b.textContent; b.classList.add('added'); b.textContent = '已加入';
-    setTimeout(() => { b.classList.remove('added'); b.textContent = t; }, 1400);
+    const t = b.textContent; b.style.minWidth = b.offsetWidth + 'px'; b.classList.add('added'); b.textContent = '已加入';
+    setTimeout(() => { b.classList.remove('added'); b.textContent = t; b.style.minWidth = ''; }, 1400);
   });
   window.addManyToCart = (list) => {
     let ok = 0; const skipped = [];
@@ -170,9 +179,10 @@
       let room = 10 - had;
       if (x.pack) room = Math.min(room, PACK_LIMIT - packTotal());
       const n = Math.min(room, x.qty);
-      if (n <= 0) { skipped.push(x.name); return; }
+      const why = x.pack && PACK_LIMIT - packTotal() <= 10 - had ? '今天 10 包萵苣額度已滿' : '這項最多 10 件';
+      if (n <= 0) { skipped.push(`${x.name}（${why}）`); return; }
       if (hit) hit.qty += n; else cart.push({ name: x.name, price: Number(x.price), src: x.src, qty: n, pack: !!x.pack, ...(x.unit ? { unit: x.unit } : {}) });
-      ok += 1; if (n < x.qty) skipped.push(`${x.name}（只加了 ${n} 件）`);
+      ok += 1; if (n < x.qty) skipped.push(`${x.name}（只加了 ${n} 件，${why}）`);
     });
     render();
     showPop(`<div class="pop-body"><b>${ok ? `已加入 ${ok} 項商品` : '沒有加入任何商品'}</b>${skipped.length ? `<p class="pop-full">已達上限，以下沒有全部加入：${skipped.map(esc).join('、')}</p>` : ''}</div>
@@ -201,6 +211,26 @@
     return out;
   };
   window.gvFmt = (d) => `週${WD[d.getDay()]} ${d.getMonth() + 1}/${d.getDate()}`;
+  window.gvSeedOrders = () => {
+    const OKEY = 'gv-orders-v2';
+    const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
+    const store = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+    // 第一次打開時放兩筆示意訂單（一筆個人、一筆公司），讓頁面不是空的
+    let orders = load(OKEY, null);
+  if (!orders) {
+    const h = gvHarvests(1)[0], past = new Date(h); past.setDate(past.getDate() - 7);
+    orders = [
+      { id: 'GV-示意-002', demo: true, status: 'ready', created: new Date().toISOString(), addr: '台北市北投區學園路 1 號', day: h.toISOString(), pay: '銀行轉帳', name: '王小明', phone: '0912345678', team: null,
+        items: [{ name: '農場搭配萵苣包', price: 200, qty: 2, src: '食在好蔬 北投農場', pack: true, unit: '包' }, { name: '有機乾燥猴頭菇', price: 220, qty: 1, src: '添丁養生黑木耳（桃園大溪）', unit: '包' }] },
+      { id: 'GV-示意-001', demo: true, status: 'done', created: past.toISOString(), addr: '台北市內湖區瑞光路 100 號 8 樓', day: past.toISOString(), pay: '開發票請款', name: '王小明', phone: '0912345678',
+        team: { org: '好日子設計有限公司', tax: '12345678', split: true, list: '' },
+        items: [{ name: '農場搭配萵苣包', price: 200, qty: 10, src: '食在好蔬 北投農場', pack: true, unit: '包' }, { name: '有機乾燥香菇', price: 220, qty: 4, src: '添丁養生黑木耳（桃園大溪）', unit: '包' }] },
+    ];
+    store(OKEY, orders);
+  }
+
+    return orders;
+  };
   const nh = $('next-harvest');
   if (nh) nh.textContent = `下一批採收：${gvFmt(gvHarvests(1)[0])}。`;
   const bd = $('batch-date');
@@ -252,6 +282,8 @@
         else if (/high|desc|貴|高/.test(v)) list.sort((a, b) => price(b) - price(a));
         list.forEach((c) => grid.appendChild(c));
       });
+      const resort = () => sortSel.dispatchEvent(new Event('change'));
+      resort(); window.addEventListener('pageshow', resort);
     }
     apply();
   }
@@ -269,10 +301,12 @@
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let paused = still;
     const pb = $('hs-pause');
-    const run = () => { clearInterval(ht); if (!paused && !hs.contains(document.activeElement)) ht = setInterval(() => show(k + 1), 5000); };
+    const dotFocused = () => !!document.activeElement?.closest?.('[data-hs]');
+    const run = () => { clearInterval(ht); if (!paused && !dotFocused()) ht = setInterval(() => show(k + 1), 5000); };
     const setPaused = (p) => { paused = p; if (pb) { pb.setAttribute('aria-pressed', String(p)); pb.setAttribute('aria-label', p ? '播放輪播' : '暫停輪播'); } run(); };
     if (pb) pb.addEventListener('click', () => setPaused(!paused));
-    hd.forEach((d) => d.addEventListener('click', () => { show(Number(d.dataset.hs)); run(); }));
+    const preload = (n) => { const im = pics[n]; if (im && im.dataset.src) { im.loading = 'eager'; im.src = im.dataset.src; im.removeAttribute('data-src'); } };
+    hd.forEach((d) => { d.addEventListener('click', () => { show(Number(d.dataset.hs)); run(); }); ['mouseenter', 'focus'].forEach((ev) => d.addEventListener(ev, () => preload(Number(d.dataset.hs)))); });
     hs.addEventListener('focusin', () => clearInterval(ht)); hs.addEventListener('focusout', run);
     show(0); setPaused(paused);
   }
@@ -291,8 +325,8 @@
     bb.onclick = () => {
       if (bb.classList.contains('added')) return;
       if (!addToCart(bb.dataset.name, unitOf(), bb.dataset.src || '食在好蔬 北投農場', Number($('qty').value), $('main-img'), !!bb.dataset.pack, bb.dataset.unit)) return;
-      const t = bb.innerHTML; bb.classList.add('added'); bb.textContent = '已加入購物車';
-      setTimeout(() => { bb.classList.remove('added'); bb.innerHTML = t; $('qty').value = 1; upd(); }, 1600); };
+      const t = bb.innerHTML; bb.style.minWidth = bb.offsetWidth + 'px'; bb.classList.add('added'); bb.textContent = '已加入購物車';
+      setTimeout(() => { bb.classList.remove('added'); bb.innerHTML = t; bb.style.minWidth = ''; $('qty').value = 1; upd(); }, 1600); };
   }
 
   // ── 標題列 LINE 登入（前端示意：正式版改成跳轉 LINE Login 授權頁，回來後由後端建立登入狀態）──

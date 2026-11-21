@@ -30,12 +30,12 @@
 - [綠皺葉萵苣](https://sasa11221.github.io/goodveggie-mockup/item-mk-curly.html)：森川鹿場在三芝的溫室用魚菜共生種的皺葉萵苣。NT$250／包，在食在好蔬和北投萵苣一起結帳。
 - [捲葉苦苣](https://sasa11221.github.io/goodveggie-mockup/item-mk-frisee.html)：葉子細碎捲曲的苦苣，森川鹿場溫室魚菜共生栽培。NT$250／包，在食在好蔬和北投萵苣一起結帳。
 - [紅綠橡木萵苣混合包](https://sasa11221.github.io/goodveggie-mockup/item-mk-oak-mix.html)：紅橡木和綠橡木萵苣一起裝，一包就有兩種顏色。森川鹿場溫室魚菜共生栽培。NT$250／包，在食在好蔬和北投萵苣一起結帳。
-- [有機乾燥黑木耳](https://sasa11221.github.io/goodveggie-mockup/item-td-black-fungus.html)：添丁在桃園大溪種的有機黑木耳，乾燥處理，方便保存。NT$110／包，在食在好蔬和北投萵苣一起結帳。
-- [綜合菇脆餅](https://sasa11221.github.io/goodveggie-mockup/item-td-crisps.html)：添丁養生黑木耳的菇類零食。NT$140／包，在食在好蔬和北投萵苣一起結帳。
-- [特濃黑木耳露](https://sasa11221.github.io/goodveggie-mockup/item-td-fungus-drink.html)：添丁養生黑木耳的黑木耳飲品。NT$100／瓶，在食在好蔬和北投萵苣一起結帳。
-- [有機乾燥猴頭菇](https://sasa11221.github.io/goodveggie-mockup/item-td-lions-mane.html)：添丁在桃園大溪種的有機猴頭菇，乾燥處理，方便保存。NT$120／包，在食在好蔬和北投萵苣一起結帳。
-- [有機乾燥香菇](https://sasa11221.github.io/goodveggie-mockup/item-td-shiitake.html)：添丁在桃園大溪種的有機香菇，乾燥處理，方便保存。NT$130／包，在食在好蔬和北投萵苣一起結帳。
-- [五福菇XO醬](https://sasa11221.github.io/goodveggie-mockup/item-td-xo.html)：用菇做的 XO 醬。NT$150／罐，在食在好蔬和北投萵苣一起結帳。
+- [有機乾燥黑木耳](https://sasa11221.github.io/goodveggie-mockup/item-td-black-fungus.html)：添丁在桃園大溪種的有機黑木耳，乾燥處理，方便保存。NT$220／包，在食在好蔬和北投萵苣一起結帳。
+- [綜合菇脆餅](https://sasa11221.github.io/goodveggie-mockup/item-td-crisps.html)：添丁養生黑木耳的菇類零食。NT$130／包，在食在好蔬和北投萵苣一起結帳。
+- [特濃黑木耳露](https://sasa11221.github.io/goodveggie-mockup/item-td-fungus-drink.html)：添丁養生黑木耳的黑木耳飲品。NT$80／瓶，在食在好蔬和北投萵苣一起結帳。
+- [有機乾燥猴頭菇](https://sasa11221.github.io/goodveggie-mockup/item-td-lions-mane.html)：添丁在桃園大溪種的有機猴頭菇，乾燥處理，方便保存。NT$220／包，在食在好蔬和北投萵苣一起結帳。
+- [有機乾燥香菇](https://sasa11221.github.io/goodveggie-mockup/item-td-shiitake.html)：添丁在桃園大溪種的有機香菇，乾燥處理，方便保存。NT$220／包，在食在好蔬和北投萵苣一起結帳。
+- [五福XO醬](https://sasa11221.github.io/goodveggie-mockup/item-td-xo.html)：用菇做的 XO 醬。NT$250／罐，在食在好蔬和北投萵苣一起結帳。
 
 ## 12 種蔬菜
 - [芝麻葉](https://sasa11221.github.io/goodveggie-mockup/veg-arugula.html)：帶獨特芝麻香與微辛辣，是義式料理的靈魂葉菜。北投魚菜共生農場無農藥栽種。

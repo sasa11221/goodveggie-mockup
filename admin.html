@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW"><head><meta charset="UTF-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>後台（示意）｜食在好蔬</title>
+<meta name="description" content="食在好蔬平台後台示意：首頁顯示規則、商品上架、合作農場。">
+<link rel="icon" href="img/favicon-48.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=optional">
+<!--seo-->
+<link rel="canonical" href="https://sasa11221.github.io/goodveggie-mockup/admin.html">
+<meta property="og:type" content="website"><meta property="og:site_name" content="食在好蔬"><meta property="og:locale" content="zh_TW">
+<meta property="og:title" content="後台（示意）｜食在好蔬"><meta property="og:description" content="食在好蔬平台後台示意：首頁顯示規則、商品上架、合作農場。">
+<meta property="og:url" content="https://sasa11221.github.io/goodveggie-mockup/admin.html"><meta property="og:image" content="https://sasa11221.github.io/goodveggie-mockup/img/site/site-3.jpg"><meta property="og:image:width" content="1600"><meta property="og:image:height" content="1200"><meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Organization","OnlineStore"],"@id":"https://sasa11221.github.io/goodveggie-mockup/#org","name":"食在好蔬","alternateName":"Good Veggie","url":"https://sasa11221.github.io/goodveggie-mockup/","logo":"https://sasa11221.github.io/goodveggie-mockup/img/logo-128.png","email":"chihaoshu@eatgoodveg.com","description":"北投魚菜共生農場當天採收、不用農藥和化肥的萵苣，和實地拜訪過的合作農場好物，在同一個市集買齊。個人、公司團體、餐廳都可以訂購。","address":{"@type":"PostalAddress","streetAddress":"一德里學園路","addressLocality":"北投區","addressRegion":"臺北市","addressCountry":"TW"},"areaServed":{"@type":"Country","name":"TW"},"sameAs":["https://lin.ee/PJHXHVrQ","https://eatgoodveg.com/"],"knowsAbout":["魚菜共生","水耕萵苣","無農藥蔬菜","在地農產"]}]}</script>
+<!--/seo-->
+<link rel="stylesheet" href="style.css">
+</head><body class="adm">
+<header class="adm-top"><div class="adm-top-in">
+  <a class="logo" href="index.html"><img src="img/logo-128.png" alt=""><span class="logo-text"><b>食在好蔬</b></span></a>
+  <span class="adm-badge">後台</span>
+  <p class="adm-note">示意版：改動只存在這台瀏覽器，前台馬上看得到。正式版會用現有的後台登入（含兩步驟驗證）。</p>
+  <a class="text-link" href="index.html" target="_blank" rel="noopener">看前台</a>
+</div></header>
+<div class="adm-wrap">
+  <nav class="adm-nav" aria-label="後台選單">
+    <button type="button" data-tab="home" aria-current="page">首頁顯示</button>
+    <button type="button" data-tab="products">商品</button>
+    <button type="button" data-tab="farms">合作農場</button>
+    <button type="button" data-io="export" class="adm-nav-reset">匯出資料</button>
+    <label class="adm-nav-io">匯入資料<input type="file" accept="application/json,.json" data-io="import" hidden></label>
+    <button type="button" data-io="test" class="adm-nav-reset adm-nav-sub">載入大量測試資料</button>
+    <button type="button" data-tab="reset" class="adm-nav-reset adm-nav-sub">還原示意資料</button>
+  </nav>
+  <main class="adm-main" id="adm-main" tabindex="-1"></main>
+</div>
+<div class="adm-toast" id="adm-toast" role="status" aria-live="polite"></div>
+<script src="catalog-seed.js"></script>
+<script src="catalog.js"></script>
+<script src="admin.js"></script>
+</body></html>

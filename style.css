@@ -1148,6 +1148,212 @@ img.line-ico{display:block;width:22px;height:22px;border-radius:6px;flex:none}
 .line-login img.line-ico{box-shadow:none}
 
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.hero2-sub{margin-bottom:28px}
+.btn-small.added:focus-visible,.btn.added:focus-visible{outline-offset:0}
+
+/* ── 購物車：每一項加商品照片 ── */
+.line{display:grid!important;grid-template-columns:56px minmax(0,1fr);gap:12px;align-items:start}
+.line-thumb{width:56px;height:56px;border-radius:8px;object-fit:cover;background:var(--sprout)}
+.line-thumb-none{display:block}
+.line-body{min-width:0}
+@media(max-width:360px){.line{grid-template-columns:44px minmax(0,1fr);gap:10px}.line-thumb{width:44px;height:44px}.line-ctrl{flex-wrap:wrap;gap:8px}.line-main{flex-wrap:wrap;gap:2px 8px}}
+
+/* ───────── 後台（示意） ───────── */
+.adm{background:#f1f3ec}
+.adm-top{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.adm-top-in{display:flex;align-items:center;gap:14px;flex-wrap:wrap;max-width:1320px;margin:0 auto;padding:10px var(--gut)}
+.adm-top .logo img{width:36px}.adm-top .logo-text b{font-size:1.3rem}
+.adm-badge{background:var(--leaf2);color:#fff;font-size:13px;font-weight:700;padding:3px 10px;border-radius:99px}
+.adm-note{flex:1 1 280px;margin:0;color:var(--ink2);font-size:14px}
+.adm-wrap{display:grid;grid-template-columns:200px minmax(0,1fr);gap:28px;max-width:1320px;margin:0 auto;padding:28px var(--gut) 80px}
+.adm-nav{display:flex;flex-direction:column;gap:4px;position:sticky;top:84px;align-self:start}
+.adm-nav button{text-align:left;font:500 16px var(--sans);padding:11px 14px;border:0;border-radius:10px;background:none;color:var(--ink);cursor:pointer}
+.adm-nav button:hover{background:var(--card)}.adm-nav button[aria-current="page"]{background:var(--leaf2);color:#fff}
+.adm-nav .adm-nav-reset{margin-top:18px;color:var(--ink2);font-size:14px}
+.adm-main{min-width:0;outline:none}
+.adm-head{display:flex;flex-wrap:wrap;align-items:end;gap:8px 20px;margin-bottom:20px}.adm-head h1{font-size:1.9rem;margin:0;flex-basis:100%}.adm-head p{margin:0;color:var(--ink2);flex:1 1 300px}
+.adm-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:20px}
+.adm-card-head h2{font-size:1.35rem;margin:0 0 4px}.adm-card-head p{margin:0 0 14px;color:var(--ink2);font-size:15px}
+.adm-seg{border:0;padding:0;margin:0 0 14px;display:flex;gap:8px;flex-wrap:wrap}.adm-seg legend{font-size:14px;color:var(--ink2);margin-bottom:6px}
+.adm-seg label{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:99px;padding:7px 14px;cursor:pointer;font-size:15px}
+.adm-seg label:has(input:checked){border-color:var(--leaf);background:var(--sprout);font-weight:500}
+.adm-rule fieldset{border:0;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:6px 18px}.adm-rule legend{font-size:14px;color:var(--ink2);margin-bottom:6px}
+.adm-small{color:var(--ink2);font-size:14px}
+.adm-thumb{width:52px;height:52px;border-radius:8px;object-fit:cover;flex:none;background:var(--sprout);display:block}
+.adm-pick,.adm-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.adm-pick li,.adm-list li{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.adm-pick .adm-empty{color:var(--ink2);padding:16px 0}
+.adm-pname{flex:1 1 200px;min-width:0;font-weight:500}.adm-pname a{color:var(--ink)}.adm-pname small{display:block;font-weight:400;color:var(--ink2);font-size:13px;margin-top:2px}
+.adm-pname em{font-style:normal}.adm-pname .st-low{color:var(--beet)}.adm-pname .st-next{color:#6b5600}
+.adm-new{font-size:12px;background:#fff3c4;color:#6b5600;border-radius:99px;padding:1px 8px;margin-left:6px}
+.adm-acts{display:flex;gap:6px}.adm-acts button,.adm-photos button{min-width:36px;height:36px;border:1px solid var(--line);background:var(--card);border-radius:8px;cursor:pointer;font:500 14px var(--sans);padding:0 10px;color:var(--ink)}
+.adm-acts button:hover:not(:disabled){border-color:var(--leaf)}.adm-acts button:disabled{opacity:.35;cursor:default}
+.adm-addline{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}.adm-addline select{flex:1 1 240px}
+.adm select,.adm input[type=text],.adm input:not([type]),.adm input[type=number],.adm input[type=search],.adm textarea{font:400 15px var(--sans);padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);max-width:100%}
+.adm-row2{display:flex;flex-wrap:wrap;gap:10px 28px;align-items:center;margin-top:14px}
+.adm-check{display:flex;align-items:center;gap:8px;cursor:pointer}
+.adm-num input{width:72px;margin:0 6px}
+.adm-preview{margin-top:18px;padding-top:14px;border-top:1px dashed var(--line)}.adm-preview h3{font-size:15px;margin:0 0 10px;color:var(--ink2)}
+.adm-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}.adm-strip span{flex:none;width:76px;text-align:center}.adm-strip .adm-thumb{width:76px;height:76px}.adm-strip small{display:block;font-size:12px;margin-top:4px;line-height:1.35}
+.adm-tools{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin-bottom:14px}
+.adm-mini{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink2)}
+.adm-switch{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;min-width:84px}
+.adm-list li.is-off .adm-thumb,.adm-list li.is-off .adm-pname{opacity:.5}
+.adm-form{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:16px}
+.adm-form label{display:flex;flex-direction:column;gap:6px;font-weight:500;font-size:15px}.adm-form .adm-check{flex-direction:row;font-weight:400}
+.adm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px 18px}
+.adm-label{font-weight:500;margin:0 0 8px}
+.adm-photos{display:flex;flex-wrap:wrap;gap:12px}
+.adm-photos figure{margin:0;width:112px}.adm-photos .adm-thumb{width:112px;height:112px}.adm-photos figcaption{font-size:12px;color:var(--ink2);margin:4px 0}
+.adm-photos figure div{display:flex;gap:6px}
+.adm-add-photo{width:112px;height:112px;border:1.5px dashed var(--line);border-radius:8px;display:flex!important;align-items:center;justify-content:center;text-align:center;cursor:pointer;color:var(--leaf2);gap:2px!important}
+.adm-add-photo:hover{border-color:var(--leaf);background:var(--sprout)}.adm-add-photo small{font-weight:400;color:var(--ink2);font-size:12px}
+.adm-err{color:var(--beet);margin:0;font-weight:500}
+.adm-formacts{display:flex;gap:12px;align-items:center}
+.adm-foot{margin-top:6px}
+.adm-toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50;max-width:calc(100% - 32px)}
+.adm-toast.show{opacity:1;transform:translate(-50%,0)}.adm-toast.bad{background:var(--beet)}
+@media(max-width:800px){.adm-wrap{grid-template-columns:1fr;gap:16px;padding-top:16px}.adm-nav{flex-direction:row;overflow-x:auto;position:static}.adm-nav button{white-space:nowrap}.adm-nav .adm-nav-reset{margin:0 0 0 auto}.adm-card{padding:18px 16px}.adm-form{padding:18px 16px}}
+/* 後台新增農場頁的相簿 */
+.farm-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}.farm-gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px}
+.adm-nav-io{display:block;font:500 14px var(--sans);padding:11px 14px;border-radius:10px;color:var(--ink2);cursor:pointer}
+.adm-nav-io:hover{background:var(--card)}.adm-nav-io:focus-within{outline:3px solid var(--leaf);outline-offset:2px}
+.adm-nav .adm-nav-sub{margin-top:0}
+@media(max-width:800px){.adm-nav-io{white-space:nowrap}}
+
+/* ── 頁尾固定在畫面底部：內容還沒長出來時，頁尾也不會先跑到中間再掉下去 ── */
+body:not(.adm){min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+body:not(.adm)>main{flex:1 0 auto}
+body:not(.adm)>.site-foot{flex-shrink:0}
+
+/* 結帳摘要：商品小圖 */
+.co-line .co-thumb{width:40px;height:40px;border-radius:6px;object-fit:cover;display:inline-block;vertical-align:middle;margin-right:10px;background:var(--sprout)}
+.co-line > span:first-child{display:flex;align-items:center;gap:0;min-width:0}
+.co-line > span:first-child small{margin-left:6px;white-space:nowrap}
+
+/* ── 後台：大量資料的管理畫面（狀態、篩選、卡片／列表、批次、分頁） ── */
+.adm-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.adm-chips button{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);border-radius:99px;padding:7px 14px;font:500 14px var(--sans);color:var(--ink);cursor:pointer}
+.adm-chips button b{font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums}
+.adm-chips button[aria-pressed="true"]{background:var(--leaf2);border-color:var(--leaf2);color:#fff}.adm-chips button[aria-pressed="true"] b{color:#dfe9d3}
+.adm-tools{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.adm-tools label{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink2)}
+.adm-search{flex:1 1 260px}.adm-search input{width:100%}
+.adm-view{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-left:auto}
+.adm-view button{border:0;background:#fff;padding:8px 14px;font:500 14px var(--sans);cursor:pointer;color:var(--ink2)}
+.adm-view button[aria-pressed="true"]{background:var(--sprout);color:var(--leaf2)}
+.adm-bulk{position:sticky;top:70px;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:var(--leaf2);color:#fff;border-radius:12px;padding:10px 14px;margin:12px 0 0}
+.adm-bulk button{border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;border-radius:8px;padding:6px 12px;font:500 14px var(--sans);cursor:pointer}
+.adm-bulk button:hover{background:rgba(255,255,255,.15)}.adm-bulk label{display:flex;align-items:center;gap:6px;font-size:14px}
+.adm-bulk .adm-link{border:0;text-decoration:underline;margin-left:auto}
+.adm-sum{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;margin:14px 0 10px;font-size:14px;color:var(--ink2)}
+.adm-empty-big{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:40px 20px;text-align:center;color:var(--ink2)}
+/* 卡片 */
+.adm-cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.adm-cards li{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s}
+.adm-cards li:hover{border-color:#c9d6b8}.adm-cards li.is-sel{border-color:var(--leaf);box-shadow:0 0 0 2px var(--leaf)}
+.adm-cards li.is-off .adm-card-pic img{filter:grayscale(.85);opacity:.55}.adm-cards li.is-off .adm-card-name{color:var(--ink2)}
+.adm-card-pic{position:relative;aspect-ratio:4/3;background:var(--sprout)}.adm-card-pic img{width:100%;height:100%;object-fit:cover;display:block}
+.adm-card-pic .adm-sel{position:absolute;top:10px;left:10px;width:22px;height:22px;z-index:1;accent-color:var(--leaf2);cursor:pointer}
+.adm-pill{position:absolute;right:8px;bottom:8px;font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;background:#fff}
+.adm-pill.st-low{color:var(--beet)}.adm-pill.st-next{color:#6b5600}
+.adm-card-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.adm-card-name{font-weight:700;color:var(--ink);text-decoration:none;line-height:1.4}.adm-card-name:hover{text-decoration:underline}
+.adm-card-body small{color:var(--ink2);font-size:13px}
+.adm-card-price{margin:0;font-weight:700;font-variant-numeric:tabular-nums}.adm-card-price span{font-weight:400;color:var(--ink2);font-size:13px}
+.adm-card-crops{margin:0;font-size:13px;color:var(--ink2)}
+.adm-card-ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:auto}.adm-card-ctrl select{padding:6px 8px;font-size:14px}
+.adm-card-body .adm-acts{flex-wrap:wrap}.adm-card-body .adm-acts button{height:32px;min-width:32px}
+/* 列表 */
+.adm-table{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.adm-tr{display:grid;grid-template-columns:36px minmax(220px,2.4fr) .8fr .9fr 1fr .9fr auto;gap:12px;align-items:center;padding:8px 14px;border-top:1px solid var(--line)}
+.adm-table-farm .adm-tr{grid-template-columns:36px minmax(220px,2.6fr) 1fr .7fr .9fr auto}
+.adm-th{border-top:0;background:#f7f8f3;font-size:13px;color:var(--ink2);font-weight:500;position:sticky;top:0}
+.adm-tr:not(.adm-th):hover{background:#fafbf7}.adm-tr.is-sel{background:var(--sprout)}.adm-tr.is-off .adm-tname{opacity:.5}
+.adm-tname{display:flex;align-items:center;gap:12px;min-width:0}.adm-tname .adm-thumb{width:44px;height:44px}
+.adm-tname > span{min-width:0}.adm-tname a{color:var(--ink);font-weight:500}.adm-tname small{display:block;color:var(--ink2);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adm-num-c{font-variant-numeric:tabular-nums}.adm-num-c small{color:var(--ink2);margin-left:3px}
+.adm-tr select{padding:6px 8px;font-size:14px}.adm-tr .adm-acts button{height:32px;min-width:32px}
+.adm-sel{width:18px;height:18px;accent-color:var(--leaf2);cursor:pointer}
+/* 分頁 */
+.adm-pager{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:20px 0 8px}
+.adm-pager button{min-width:38px;height:38px;border:1px solid var(--line);background:var(--card);border-radius:8px;font:500 14px var(--sans);cursor:pointer;padding:0 10px}
+.adm-pager button[aria-current="page"]{background:var(--leaf2);border-color:var(--leaf2);color:#fff}.adm-pager button:disabled{opacity:.4;cursor:default}
+.adm-pager span{align-self:center;color:var(--ink2)}
+@media(max-width:980px){
+  .adm-tr,.adm-table-farm .adm-tr{grid-template-columns:32px minmax(0,1fr) auto;row-gap:6px}
+  .adm-th{display:none}
+  .adm-tr > span:nth-child(n+3):not(.adm-acts){grid-column:2/3;font-size:13px}
+  .adm-tr > .adm-acts{grid-column:2/-1}
+  .adm-view{margin-left:0}
+}
+@media(max-width:480px){.adm-cards{grid-template-columns:1fr 1fr;gap:10px}.adm-card-body{padding:10px}.adm-card-ctrl{flex-direction:column;align-items:stretch}}
+.adm-card-pic{overflow:hidden}.adm-card-pic img{position:absolute;inset:0}
+
+/* ── 商品卡：農場名只佔一行、價格和按鈕對齊在底部（手機滑動列不會高低不齊） ── */
+.pcard{display:flex;flex-direction:column}
+.pcard .src{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.pcard .row{margin-top:auto}
+
+/* ── 首頁輪播暫停鈕：不要灰色圓底，只留跟圓點同色的小圖示 ── */
+.hs-dots .hs-pause{width:24px;height:24px;background:none;border-radius:4px;opacity:.85;margin-right:4px}
+.hs-dots .hs-pause:hover{background:none;opacity:1}
+.hs-dots .hs-pause svg{width:13px;height:13px;stroke-width:2.6;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+.hs-dots .hs-pause .i-play{filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+
+/* ── 品牌故事：電腦上字放大、行距舒服一點 ── */
+@media(min-width:901px){
+  .ch-body{font-size:1.28rem;line-height:2;max-width:820px}
+  .ch-body p{margin:0 0 1.1em}
+  .story-intro .lead{font-size:1.3rem}
+  .ch-side h2{font-size:clamp(1.7rem,2.4vw,2.2rem)}
+}
+/* 合作方式：四張服務卡 */
+@media(min-width:1101px){.pt-cards{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:601px) and (max-width:1100px){.pt-cards{grid-template-columns:1fr 1fr}}
+
+/* ── 農場影片 ── */
+.farm-videos h2{margin-bottom:14px}
+.yt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.yt-grid.is-one{grid-template-columns:minmax(0,880px)}
+.yt-grid .yt-main{grid-column:1/-1;max-width:880px}
+.yt{margin:0}.yt figcaption{font-size:15px;color:var(--ink2);margin-top:8px}
+.yt-btn,.yt iframe{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:14px;overflow:hidden;background:#111}
+.yt-btn{position:relative;padding:0;cursor:pointer}
+.yt-btn img{width:100%;height:100%;object-fit:cover;opacity:.92;transition:opacity .2s,transform .3s var(--ease)}
+.yt-btn:hover img{opacity:1;transform:scale(1.02)}
+.yt-play{position:absolute;left:50%;top:50%;width:68px;height:48px;transform:translate(-50%,-50%);background:rgba(20,20,20,.78);border-radius:14px;transition:background .2s}
+.yt-play::after{content:"";position:absolute;left:28px;top:14px;border-style:solid;border-width:10px 0 10px 16px;border-color:transparent transparent transparent #fff}
+.yt-btn:hover .yt-play,.yt-btn:focus-visible .yt-play{background:#c4302b}
+.yt-short{max-width:320px}.yt-short .yt-btn,.yt-short iframe{aspect-ratio:9/16}
+@media(max-width:600px){.yt-grid{grid-template-columns:1fr}.yt-play{width:56px;height:40px}.yt-play::after{left:22px;top:11px;border-width:9px 0 9px 14px}.yt-short{max-width:none;width:72%;margin:0 auto}}
+.hs-dots button.hs-pause,.hs-dots button.hs-pause:hover{background:transparent!important;border:0}
+/* 品牌故事：電腦上字再大一點 */
+@media(min-width:901px){.ch-body{font-size:1.45rem;line-height:1.95;max-width:880px}.story-intro .lead{font-size:1.4rem}.ch-turn strong{font-size:min(2.2rem,calc(100cqi / 34.6))}}
+@media(min-width:601px) and (max-width:900px){.ch-body{font-size:1.2rem}}
+
+/* ── 農場頁右側：影片優先的手動幻燈片 ── */
+.fmedia{min-width:0}
+.fm-stage{position:relative;aspect-ratio:16/10;border-radius:14px;overflow:hidden;background:#111}
+.fm-slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility 0s .35s}
+.fm-slide.is-on{opacity:1;visibility:visible;transition:opacity .35s var(--ease)}
+.fm-slide > img{width:100%;height:100%;object-fit:cover;display:block}
+.fm-slide .yt-btn,.fm-slide iframe{width:100%;height:100%;aspect-ratio:auto;border-radius:0}
+.fm-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border:0;border-radius:50%;background:rgba(255,255,255,.9);cursor:pointer;z-index:2;box-shadow:0 4px 14px -6px rgba(0,0,0,.5);opacity:.9;transition:opacity .2s,background .2s}
+.fm-nav:hover{opacity:1;background:#fff}
+.fm-nav::before{content:"";position:absolute;inset:0;margin:auto;width:10px;height:10px;border:solid var(--ink);border-width:0 2.5px 2.5px 0}
+.fm-prev{left:10px}.fm-prev::before{transform:translateX(2px) rotate(135deg)}
+.fm-next{right:10px}.fm-next::before{transform:translateX(-2px) rotate(-45deg)}
+.fm-slide.is-on:has(iframe) ~ .fm-nav{opacity:.55}
+.fm-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;min-height:28px}
+.fm-cap{margin:0;font-size:15px;color:var(--ink2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fm-cap-k{display:inline-block;font-size:12px;font-weight:700;color:#fff;background:var(--leaf2);border-radius:99px;padding:1px 9px;margin-right:8px;vertical-align:1px}
+.fm-dots{display:flex;gap:8px;flex:none}
+.fm-dots button{position:relative;width:9px;height:9px;padding:0;border:0;border-radius:50%;background:#c9cfc2;cursor:pointer}
+.fm-dots button::after{content:"";position:absolute;inset:-8px}
+.fm-dots button.is-video{width:22px;border-radius:99px}
+.fm-dots button[aria-current="true"]{background:var(--leaf2)}
+@media(max-width:600px){.fm-nav{width:34px;height:34px}.fm-cap{font-size:14px}}
 
 /* 對外版本：保險起見，任何漏掉的待辦都不顯示 */
 .tbd,.mockbar{display:none!important}

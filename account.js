@@ -22,7 +22,7 @@
     $('a-org').value = u.org || ''; $('a-tax').value = u.tax || ''; syncTeam();
     const n = u.notify || { order: true, harvest: true, farm: false };
     document.querySelectorAll('[data-notify]').forEach((c) => { c.checked = !!n[c.dataset.notify]; });
-    const orders = load(OKEY) || [];
+    const orders = (window.gvSeedOrders ? gvSeedOrders() : load(OKEY)) || [];
     $('acc-olist').innerHTML = orders.length ? orders.slice(0, 3).map((o) => {
       const [label, cls] = STATUS[o.status] || ['—', 'wait'];
       const total = o.items.reduce((s, x) => s + x.qty * x.price, 0);

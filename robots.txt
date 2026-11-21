@@ -1,7 +1,10 @@
 User-agent: *
 Allow: /
 Disallow: /account.html
+Disallow: /admin.html
 Disallow: /checkout.html
+Disallow: /farm.html
 Disallow: /orders.html
+Disallow: /p.html
 
 Sitemap: https://sasa11221.github.io/goodveggie-mockup/sitemap.xml

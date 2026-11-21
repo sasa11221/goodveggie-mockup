@@ -9,9 +9,9 @@
   const sumOf = (items) => items.reduce((s, x) => s + x.qty * x.price, 0);
   const hasTbd = (items) => items.some((x) => !x.price);
   const group = (items) => items.reduce((g, x) => ((g[x.src] = g[x.src] || []).push(x), g), {});
-  const linesHtml = (items) => Object.entries(group(items)).map(([src, xs]) =>
+  const linesHtml = (items) => Object.entries(group(items)).sort((a, b) => ((a[0].includes('食在好蔬') ? '0' : '1') + a[0]).localeCompare((b[0].includes('食在好蔬') ? '0' : '1') + b[0], 'zh-Hant')).map(([src, xs]) =>
     `<div class="co-group"><h3>${esc(src)}</h3>${xs.map((x) =>
-      `<p class="co-line"><span>${esc(x.name)} <small>× ${x.qty}</small></span><span>${x.price ? money(x.qty * x.price) : ''}</span></p>`).join('')}</div>`).join('');
+      `<p class="co-line"><span>${window.gvPhotoOf && gvPhotoOf(x) ? `<img class="co-thumb" src="${esc(gvPhotoOf(x))}" alt="">` : ''}${esc(x.name)} <small>× ${x.qty}</small></span><span>${x.price ? money(x.qty * x.price) : ''}</span></p>`).join('')}</div>`).join('');
 
   // ───────── 結帳頁 ─────────
   const form = $('co');
@@ -107,19 +107,8 @@
   const STEPS = ['已送出', '確認訂單', '出貨', '送達'];
   const STATUS = { pending: ['待確認', 0, 'wait'], ready: ['準備出貨', 2, 'ok'], done: ['已送達', 3, 'done'], cancel: ['已取消', -1, 'off'] };
 
-  // 第一次打開時放兩筆示意訂單（一筆個人、一筆公司），讓頁面不是空的
-  let orders = load(OKEY, null);
-  if (!orders) {
-    const h = gvHarvests(1)[0], past = new Date(h); past.setDate(past.getDate() - 7);
-    orders = [
-      { id: 'GV-示意-002', demo: true, status: 'ready', created: new Date().toISOString(), addr: '台北市北投區學園路 1 號', day: h.toISOString(), pay: '銀行轉帳', name: '王小明', phone: '0912345678', team: null,
-        items: [{ name: '農場搭配萵苣包', price: 200, qty: 2, src: '食在好蔬 北投農場', pack: true }, { name: '有機乾燥猴頭菇', price: 120, qty: 1, src: '添丁養生黑木耳（桃園大溪）' }] },
-      { id: 'GV-示意-001', demo: true, status: 'done', created: past.toISOString(), addr: '台北市內湖區瑞光路 100 號 8 樓', day: past.toISOString(), pay: '開發票請款', name: '王小明', phone: '0912345678',
-        team: { org: '好日子設計有限公司', tax: '12345678', split: true, list: '' },
-        items: [{ name: '農場搭配萵苣包', price: 200, qty: 10, src: '食在好蔬 北投農場', pack: true }, { name: '有機乾燥香菇', price: 130, qty: 4, src: '添丁養生黑木耳（桃園大溪）' }] },
-    ];
-    store(OKEY, orders);
-  }
+  // 第一次打開時放兩筆示意訂單（共用 site.js 的 gvSeedOrders）
+  let orders = gvSeedOrders();
 
   let tab = 'open';
   const card = (o) => {
