@@ -280,30 +280,33 @@
     const apply = (keepPage) => {
       if (keepPage !== true) page = 1;
       const src = [...document.querySelectorAll('input[name=src]:checked')].map((i) => i.value);
+      const pick = $('src-farm') ? $('src-farm').value : '';
+      const srcOk = (c) => pick ? c.dataset.src === pick : (c.dataset.src === 'own' ? src.includes('own') : (src.includes('partner') || src.includes(c.dataset.src)));
       const cat = [...document.querySelectorAll('input[name=cat]:checked')].map((i) => i.value);
       const kw = norm(q.value);
       let n = 0;
       cards.forEach((c) => {
         const hit = !kw || norm((c.querySelector('h3')?.textContent || '') + (c.querySelector('.src')?.textContent || '')).includes(kw);
-        const ok = hit && src.includes(c.dataset.src) && cat.includes(c.dataset.cat);
+        const ok = hit && srcOk(c) && cat.includes(c.dataset.cat);
         if (ok) delete c.dataset.filtered; else c.dataset.filtered = '1';
         c.hidden = !ok; n += ok;
       });
       paginate();
       $('shown').textContent = `共 ${n} 件商品`;
       $('no-result').hidden = n > 0;
-      const off = [...side.querySelectorAll('input')].filter((i) => !i.checked).length;
+      const off = [...side.querySelectorAll('input')].filter((i) => !i.checked).length + (pick ? 1 : 0);
       $('filter-sum').textContent = off ? '（已篩選）' : '';
     };
-    side.querySelectorAll('input').forEach((i) => i.addEventListener('change', () => apply()));
+    side.querySelectorAll('input,select').forEach((i) => i.addEventListener('change', () => apply()));
     q.addEventListener('input', () => apply());
     fbtn.addEventListener('click', () => {
       const o = side.classList.toggle('open');
       fbtn.setAttribute('aria-expanded', o);
     });
     const qs = new URLSearchParams(location.search).get('src');
-    const known = [...document.querySelectorAll('input[name=src]')].map((i) => i.value);
-    if (qs && (qs === 'farm' || known.includes(qs))) document.querySelectorAll('input[name=src]').forEach((i) => { i.checked = qs === 'farm' ? i.value !== 'own' : i.value === qs; });
+    // 網址參數：?src=own 只看自家、?src=farm 只看合作農場、?src=農場代號 指定一家
+    if (qs === 'own' || qs === 'farm') document.querySelectorAll('input[name=src]').forEach((i) => { i.checked = qs === 'own' ? i.value === 'own' : i.value !== 'own'; });
+    else if (qs && $('src-farm') && [...$('src-farm').options].some((o) => o.value === qs)) $('src-farm').value = qs;
     // 排序
     const sortSel = document.querySelector('select[name=sort], #sort'), grid = $('pgrid');
     if (sortSel && grid) {
@@ -320,6 +323,30 @@
       resort(); window.addEventListener('pageshow', resort);
     }
     apply(true);
+  }
+
+  // 合作農場頁：農場會越來越多，一頁 4 家（頁碼記在網址 ?page=）
+  const flist = document.querySelector('.farm-list');
+  if (flist) {
+    const PERF = 4;
+    let fpage = Math.max(1, parseInt(new URLSearchParams(location.search).get('page'), 10) || 1);
+    const fpager = document.createElement('nav'); fpager.className = 'shop-pager'; fpager.setAttribute('aria-label', '農場分頁');
+    flist.after(fpager);
+    const fpaint = () => {
+      const rows = [...flist.querySelectorAll('.farm-row')].filter((r) => !r.dataset.off);
+      const pages = Math.max(1, Math.ceil(rows.length / PERF)); fpage = Math.min(fpage, pages);
+      rows.forEach((r, i) => { r.hidden = Math.floor(i / PERF) !== fpage - 1; });
+      try { const u = new URL(location.href); if (fpage > 1) u.searchParams.set('page', fpage); else u.searchParams.delete('page'); history.replaceState(null, '', u); } catch (e) {}
+      if (pages <= 1) { fpager.hidden = true; fpager.innerHTML = ''; return; }
+      fpager.hidden = false;
+      fpager.innerHTML = `<button type="button" data-fpg="${fpage - 1}"${fpage > 1 ? '' : ' disabled'}>上一頁</button>`
+        + Array.from({ length: pages }, (_, i) => i + 1).reduce((a, n) => { if (n === 1 || n === pages || Math.abs(n - fpage) <= 1) a.push(n); else if (a[a.length - 1] !== '…') a.push('…'); return a; }, [])
+          .map((n) => n === '…' ? '<span aria-hidden="true">…</span>' : `<button type="button" data-fpg="${n}"${n === fpage ? ' aria-current="page"' : ''} aria-label="第 ${n} 頁">${n}</button>`).join('')
+        + `<button type="button" data-fpg="${fpage + 1}"${fpage < pages ? '' : ' disabled'}>下一頁</button>`
+        + `<p class="shop-pager-info">第 ${(fpage - 1) * PERF + 1}–${Math.min(fpage * PERF, rows.length)} 家，共 ${rows.length} 家</p>`;
+    };
+    fpager.addEventListener('click', (e) => { const b = e.target.closest('[data-fpg]'); if (!b || b.disabled) return; fpage = Number(b.dataset.fpg); fpaint(); flist.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    fpaint();
   }
 
   // 首頁：大圖淡入淡出輪播（5 秒一張；可按暫停、鍵盤聚焦時暫停；減少動態時不自動播）
@@ -362,6 +389,69 @@
       const t = bb.innerHTML; bb.style.minWidth = bb.offsetWidth + 'px'; bb.classList.add('added'); bb.textContent = '已加入購物車';
       setTimeout(() => { bb.classList.remove('added'); bb.innerHTML = t; bb.style.minWidth = ''; $('qty').value = 1; upd(); }, 1600); };
   }
+
+
+  // ── 照片放大檢視：點農場照片（相簿、右上幻燈片）放大，可左右切換、滑動、Esc 關閉 ──
+  (() => {
+    const SEL = '.farm-gallery img, .fm-slide > img, .farm-hero-pic img';
+    const box = document.createElement('div');
+    box.className = 'lb'; box.hidden = true;
+    box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', '照片放大檢視');
+    box.innerHTML = `<button type="button" class="lb-x" aria-label="關閉">×</button>
+      <button type="button" class="lb-nav lb-prev" aria-label="上一張"></button>
+      <figure class="lb-fig"><img alt=""><figcaption><span class="lb-cap"></span><span class="lb-n"></span></figcaption></figure>
+      <button type="button" class="lb-nav lb-next" aria-label="下一張"></button>`;
+    document.body.appendChild(box);
+    let list = [], k = 0, back = null;
+    const im = box.querySelector('img');
+    const cap = (el) => el.closest('figure')?.querySelector('figcaption')?.textContent || el.alt || '';
+    const show = (n) => {
+      k = (n + list.length) % list.length; const el = list[k];
+      im.src = el.currentSrc || el.src; im.alt = el.alt || '';
+      box.querySelector('.lb-cap').textContent = cap(el);
+      box.querySelector('.lb-n').textContent = list.length > 1 ? `${k + 1} ／ ${list.length}` : '';
+      box.classList.toggle('one', list.length < 2);
+      [list[k + 1], list[k - 1]].forEach((x) => { if (x) { const p = new Image(); p.src = x.currentSrc || x.src; } });
+    };
+    const open = (el) => {
+      const group = el.closest('.farm-gallery, .fmedia, .farm-hero') || document;
+      list = [...group.querySelectorAll(SEL)].filter((x) => x.src && !x.src.startsWith('data:'));
+      // 農場頁：右上幻燈片和下面相簿算同一組，可以一路看完
+      if (el.closest('.fmedia, .farm-hero')) { const g = document.querySelector('.farm-gallery'); if (g) list = [...list, ...g.querySelectorAll('img')]; }
+      list = [...new Map(list.map((x) => [x.currentSrc || x.src, x])).values()];
+      back = document.activeElement; box.hidden = false; document.documentElement.classList.add('lb-open');
+      show(Math.max(0, list.findIndex((x) => (x.currentSrc || x.src) === (el.currentSrc || el.src))));
+      box.querySelector('.lb-x').focus();
+    };
+    const close = () => { box.hidden = true; document.documentElement.classList.remove('lb-open'); im.removeAttribute('src'); if (back) back.focus(); };
+    // 可以放大的照片：加上提示游標和鍵盤操作
+    const mark = () => document.querySelectorAll(SEL).forEach((el) => {
+      if (el.dataset.lb) return; el.dataset.lb = '1'; el.classList.add('lb-able');
+      if (!el.closest('button,a')) { el.tabIndex = 0; el.setAttribute('role', 'button'); el.setAttribute('aria-label', `放大檢視：${cap(el) || '照片'}`); }
+    });
+    mark(); new MutationObserver(mark).observe(document.body, { childList: true, subtree: true });
+    document.addEventListener('click', (e) => {
+      const el = e.target.closest(SEL); if (el && !box.contains(el)) { e.preventDefault(); return open(el); }
+      if (box.hidden) return;
+      if (e.target.closest('.lb-x') || e.target === box) return close();
+      if (e.target.closest('.lb-prev')) show(k - 1);
+      if (e.target.closest('.lb-next')) show(k + 1);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (!box.hidden) {
+        if (e.key === 'Escape') close();
+        else if (e.key === 'ArrowLeft') show(k - 1);
+        else if (e.key === 'ArrowRight') show(k + 1);
+        else if (e.key === 'Tab') { const f = [...box.querySelectorAll('button')].filter((b) => b.offsetParent); const i = f.indexOf(document.activeElement); if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); } }
+        return;
+      }
+      const el = e.target.closest && e.target.closest(SEL);
+      if (el && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(el); }
+    });
+    let x0 = null;
+    box.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    box.addEventListener('touchend', (e) => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 40) show(k + (dx < 0 ? 1 : -1)); });
+  })();
 
   // ── 標題列 LINE 登入（前端示意：正式版改成跳轉 LINE Login 授權頁，回來後由後端建立登入狀態）──
   const UKEY = 'gv-user-v1';

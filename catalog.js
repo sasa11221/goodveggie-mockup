@@ -194,11 +194,21 @@
     if (hasAdminData()) grid.innerHTML = list.map(pcard).join('');
     const fs = document.querySelector('#side input[name=src]')?.closest('fieldset');
     if (fs) {
-      const used = farms().filter((f) => !f.hidden && list.some((p) => p.farm === f.id));
-      fs.innerHTML = '<legend>來源</legend>' + used.map((f) => `<label><input type="checkbox" name="src" value="${esc(f.id)}" checked> ${esc(f.own ? '食在好蔬' : f.name)}<span class="n">${list.filter((p) => p.farm === f.id).length}</span></label>`).join('');
+      // 農場會越來越多：來源只分「自家」和「合作農場」兩大類，要找特定農場再用下拉選單
+      const partners = farms().filter((f) => !f.own && !f.hidden && list.some((p) => p.farm === f.id));
+      const nOwn = list.filter((p) => p.farm === 'own').length, nPart = list.length - nOwn;
+      fs.className = 'src-fs';
+      fs.innerHTML = `<legend>來源</legend>
+        <label><input type="checkbox" name="src" value="own" checked> 食在好蔬 北投農場<span class="n">${nOwn}</span></label>
+        <label><input type="checkbox" name="src" value="partner" checked> 合作農場<span class="n">${nPart}</span></label>
+        <label class="src-pick"><span>指定農場</span><select id="src-farm"><option value="">全部 ${partners.length} 家</option>${partners.map((f) => `<option value="${esc(f.id)}">${esc(f.name)}（${list.filter((p) => p.farm === f.id).length}）</option>`).join('')}</select></label>`;
     }
     const cs = document.querySelector('#side input[name=cat]')?.closest('fieldset');
-    if (cs) cs.querySelectorAll('input[name=cat]').forEach((i) => { const n = i.parentElement.querySelector('.n'); if (n) n.textContent = list.filter((p) => p.cat === i.value).length; });
+    if (cs) {
+      cs.querySelector('legend').textContent = '品項';
+      cs.querySelectorAll('input[name=cat]').forEach((i) => { const n = i.parentElement.querySelector('.n'); if (n) n.textContent = list.filter((p) => p.cat === i.value).length; });
+      cs.parentElement.prepend(cs);   // 主要用品項篩選，放最上面
+    }
   }
 
   // 合作農場列表：照後台順序排，加上新農場、隱藏下架的農場
@@ -216,7 +226,7 @@
       ${goods.length ? `<ul class="fs-goods">${goods.map((p) => `<li><a href="${esc(p.url)}"><span class="pic-wrap"><img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy"></span><span>${esc(p.name)}</span></a></li>`).join('')}</ul>` : ''}
       <a class="text-link" href="shop.html?src=${encodeURIComponent(f.id)}">買這家農場的商品</a></div>`;
       }
-      row.hidden = !!f.hidden;
+      row.hidden = !!f.hidden; if (f.hidden) row.dataset.off = '1'; else delete row.dataset.off;
       fl.appendChild(row);
     });
   }
@@ -256,6 +266,26 @@
 
   // 原有農場頁：補上後台新增、屬於這家農場的商品
   const fid = (location.pathname.match(/farm-([a-z]+)\.html$/) || [])[1];
+  // 原有農場：套用後台填的資料（名稱、地區、介紹、種什麼、種法、認證、照片）
+  const farmPatch = (f, root) => {
+    const ed = state().farmEdits[f.id]; if (!ed || !root) return;
+    const set = (sel, v) => { const el = root.querySelector(sel); if (el && v) el.textContent = v; };
+    set('h1', ed.name); set('.farm-hero .lead, :scope > div > p:not(.where):not(.crops)', ed.summary);
+    const dd = (k) => [...root.querySelectorAll('.facts dt')].find((t) => t.textContent === k)?.nextElementSibling;
+    [['地點', ed.region], ['種什麼', ed.crops], ['種法', ed.grow], ['認證', ed.cert], ['檢驗', ed.cert]].forEach(([k, v]) => { const d = dd(k); if (d && v) d.textContent = v; });
+    if (ed.img) root.querySelectorAll('.farm-ph').forEach((ph) => { ph.classList.remove('farm-ph'); ph.innerHTML = `<img src="${esc(ed.img)}" alt="${esc(f.name)}">`; });
+  };
+  if (fid && farm(fid) && hasAdminData()) farmPatch(farm(fid), document.querySelector('main'));
+  if (fl && hasAdminData()) fl.querySelectorAll('.farm-row').forEach((row) => {
+    const id = (row.querySelector('a')?.getAttribute('href') || '').replace(/^farm-|\.html$/g, ''), f = farm(id), ed = state().farmEdits[id];
+    if (!f || !ed) return;
+    farmPatch(f, row);
+    if (ed.region) { const w = row.querySelector('.where'); if (w) w.textContent = ed.region; }
+    if (ed.name) { const a = row.querySelector('h2 a'); if (a) a.textContent = ed.name; }
+    if (ed.summary) { const p = row.querySelector('h2 + p'); if (p) p.textContent = ed.summary; }
+    if (ed.crops) { const c = row.querySelector('.crops'); if (c) c.innerHTML = `<b>種什麼</b>${esc(ed.crops)}`; }
+  });
+
   if (fid && farm(fid)) {
     const pic = document.querySelector('main .farm-hero .farm-hero-pic'), im = pic && pic.querySelector('img');
     const html = heroMedia(farm(fid), im && im.getAttribute('src'), im && im.alt);

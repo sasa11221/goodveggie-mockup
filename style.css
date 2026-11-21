@@ -1377,5 +1377,185 @@ body:not(.adm)>.site-foot{flex-shrink:0}
 .shop-pager-info{flex-basis:100%;text-align:center;margin:4px 0 0;font-size:14px;color:var(--ink2)}
 @media(max-width:420px){.shop-pager{gap:6px}.shop-pager button{min-width:40px;height:40px;padding:0 10px;font-size:14px}}
 
+/* 照片還沒拿到的農場：先放淺色框，對外版本沒有字就整格收起來 */
+.farm-ph{display:flex;align-items:center;justify-content:center;background:var(--sprout);aspect-ratio:4/3;border-radius:12px}
+.farm-ph:empty{display:none}
+.farm-hero:has(.farm-ph:empty){grid-template-columns:1fr}
+.farm-row:has(.farm-ph:empty){grid-template-columns:1fr}.farm-row > a:has(.farm-ph:empty){display:none}
+
+.head-row .burger,.head-row .head-acts{flex:none}.head-row .logo{min-width:0}
+@media(max-width:340px){.head-row{gap:4px}.logo{gap:5px}.head-row .burger{width:40px}}
+
+/* ── 照片放大檢視 ── */
+.lb-able{cursor:zoom-in}
+.lb-able:focus-visible{outline:3px solid var(--leaf);outline-offset:3px}
+html.lb-open{overflow:hidden}
+.lb{position:fixed;inset:0;z-index:100;background:rgba(14,20,16,.92);display:flex;align-items:center;justify-content:center;padding:56px 72px 40px}
+.lb[hidden]{display:none}
+.lb-fig{margin:0;max-width:100%;max-height:100%;display:flex;flex-direction:column;align-items:center}
+.lb-fig img{max-width:min(1200px,100%);max-height:calc(100dvh - 140px);width:auto;height:auto;object-fit:contain;border-radius:8px;box-shadow:0 20px 60px -20px rgba(0,0,0,.6)}
+.lb-fig figcaption{display:flex;gap:16px;justify-content:space-between;width:100%;max-width:1200px;margin-top:12px;color:#e6ece1;font-size:15px}
+.lb-n{color:#aab5a6;font-variant-numeric:tabular-nums;white-space:nowrap}
+.lb-x{position:absolute;top:12px;right:14px;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:30px;line-height:1;cursor:pointer}
+.lb-x:hover{background:rgba(255,255,255,.22)}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border:0;border-radius:50%;background:rgba(255,255,255,.14);cursor:pointer}
+.lb-nav:hover{background:rgba(255,255,255,.26)}
+.lb-nav::before{content:"";position:absolute;inset:0;margin:auto;width:12px;height:12px;border:solid #fff;border-width:0 3px 3px 0}
+.lb-prev{left:14px}.lb-prev::before{transform:translateX(3px) rotate(135deg)}
+.lb-next{right:14px}.lb-next::before{transform:translateX(-3px) rotate(-45deg)}
+.lb.one .lb-nav{display:none}
+.lb :focus-visible{outline:2px solid #fff;outline-offset:2px}
+@media(max-width:600px){.lb{padding:56px 10px 24px}.lb-nav{top:auto;bottom:18px;transform:none;width:44px;height:44px}.lb-prev{left:calc(50% - 60px)}.lb-next{right:calc(50% - 60px)}.lb-fig img{max-height:calc(100dvh - 190px)}.lb-fig figcaption{flex-direction:column;gap:4px;font-size:14px;padding:0 6px}}
+.src-note{font-size:13px;color:var(--ink2);margin:10px 0 0}
+
+/* ── 市集：來源精簡、品項優先 ── */
+.src-pick{display:flex!important;flex-direction:column;align-items:stretch!important;gap:4px!important;margin-top:6px;font-size:14px!important;color:var(--ink2)}
+.src-pick select{font:400 14px var(--sans);padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);max-width:100%}
+
+/* ── 市集：右側小測驗 ── */
+@media(min-width:1200px){
+  .shop{grid-template-columns:200px minmax(0,1fr) 280px;grid-template-areas:"side tools quiz" "side list quiz"}
+}
+@media(min-width:901px) and (max-width:1199px){
+  .shop{grid-template-areas:"side tools" "side quiz" "side list"}
+}
+@media(max-width:900px){.shop{grid-template-areas:"tools" "side" "quiz" "list"}}
+.quiz{grid-area:quiz;align-self:start;background:#f3f8e8;border:1px solid #d5e3bb;border-radius:16px;padding:18px 18px 16px}
+@media(min-width:1200px){.quiz{position:sticky;top:100px}}
+@media(max-width:1199px){.quiz{margin:4px 0 18px}}
+.quiz-head{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 12px}
+.quiz-k{grid-column:1/2;margin:0;font-size:13px;color:var(--leaf2);font-weight:700;letter-spacing:.06em}
+.quiz-head h2{grid-column:1/2;margin:0;font-size:1.25rem}
+.quiz-toggle{grid-column:2;grid-row:1/3;border:0;background:var(--leaf2);color:#fff;font:500 15px var(--sans);padding:9px 18px;border-radius:99px;cursor:pointer}
+.quiz-toggle[aria-expanded="true"]{background:transparent;color:var(--leaf2);border:1px solid var(--leaf2)}
+.quiz-body:empty{display:none}
+.quiz-body{margin-top:14px}
+.quiz-step{font-size:13px;color:var(--ink2);margin:0 0 4px}
+.quiz-q{font-weight:700;margin:0 0 10px;font-size:1.05rem}
+.quiz-opts{display:grid;gap:8px}
+.quiz-opts button{text-align:left;border:1px solid #cddcb7;background:#fff;border-radius:10px;padding:10px 12px;font:500 15px var(--sans);color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s}
+.quiz-opts button:hover{border-color:var(--leaf);background:#fbfdf7}
+.quiz-opts small{display:block;color:var(--ink2);font-weight:400;font-size:13px;margin-top:2px}
+.quiz-back{margin-top:10px;border:0;background:none;color:var(--ink2);font:400 14px var(--sans);cursor:pointer;padding:4px 0;text-decoration:underline}
+.quiz-res h3{font-size:1rem;margin:0 0 10px}
+.quiz-items{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.quiz-items li{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;background:#fff;border:1px solid #dfe8cf;border-radius:12px;padding:8px}
+.quiz-items img{width:64px;height:64px;object-fit:cover;border-radius:8px}
+.quiz-items b{display:block;font-size:15px;line-height:1.35}.quiz-items b a{color:var(--ink);text-decoration:none}
+.quiz-items .why{display:block;font-size:12.5px;color:var(--leaf2);margin:2px 0 4px;line-height:1.45}
+.quiz-items .qp{display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:700;font-size:14px}
+.quiz-items .btn-small{padding:5px 10px;font-size:13px}
+.quiz-note{font-size:13px;color:var(--ink2);margin:10px 0 0}
+.quiz-again{margin-top:10px;border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 14px;font:500 14px var(--sans);cursor:pointer}
+@media(min-width:901px) and (max-width:1199px){.quiz-items{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:601px) and (max-width:900px){.quiz-items{grid-template-columns:repeat(3,minmax(0,1fr))}.quiz-items li{grid-template-columns:1fr}.quiz-items img{width:100%;height:auto;aspect-ratio:4/3}}
+/* 手機上分頁的「上一頁／下一頁」改成箭頭，頁碼排一行 */
+@media(max-width:480px){
+  .shop-pager > button:first-child,.shop-pager > button:last-of-type{font-size:0;min-width:40px;padding:0}
+  .shop-pager > button:first-child::before{content:"‹";font-size:22px}
+  .shop-pager > button:last-of-type::before{content:"›";font-size:22px}
+  .shop-pager{gap:5px}
+}
+@media(max-width:480px){.shop-pager{gap:4px}.shop-pager button{min-width:36px!important;height:40px;padding:0 6px}.shop-pager span{padding:0}}
+
+/* ── 小測驗改成左下角的浮動小卡（市集版面恢復原本的兩欄） ── */
+.shop{grid-template-columns:200px minmax(0,1fr)!important;grid-template-areas:"side tools" "side list"!important}
+@media(max-width:900px){.shop{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"tools" "side" "list"!important}}
+.quiz{position:fixed!important;left:20px;bottom:20px;top:auto!important;z-index:45;margin:0!important;width:auto;max-width:calc(100vw - 40px);
+  padding:12px 12px 12px 16px;border-radius:16px;box-shadow:0 14px 34px -14px rgba(31,42,34,.45);background:#f3f8e8}
+.quiz-head{grid-template-columns:auto auto;gap:0 14px}
+.quiz-k{font-size:12px}
+.quiz-head h2{font-size:1.05rem}
+.quiz-toggle{padding:8px 16px;font-size:14px}
+.quiz-toggle:focus-visible{outline:2px solid var(--leaf2);outline-offset:2px}
+.quiz.is-open{width:340px;max-height:min(78vh,640px);overflow:auto;padding:16px}
+.quiz-body{margin-top:12px}
+.quiz .quiz-items{grid-template-columns:1fr!important}
+.quiz .quiz-items li{grid-template-columns:56px minmax(0,1fr)!important}
+.quiz .quiz-items img{width:56px!important;height:56px!important;aspect-ratio:auto!important}
+@media(max-width:600px){
+  .quiz{left:12px;bottom:12px;padding:8px 8px 8px 12px}
+  .quiz-k{display:none}
+  .quiz-head h2{font-size:.95rem}
+  .quiz.is-open{left:12px;right:12px;width:auto;max-height:72vh}
+  .quiz.is-open .quiz-k{display:block}
+}
+/* 購物車抽屜打開時，小卡先藏起來 */
+body:has(.drawer.open) .quiz{display:none}
+
+/* ── 小測驗放在「市集」標題右側（跟著頁面，不浮在商品上）；展開時往下浮出面板 ── */
+.shop-intro{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:28px;align-items:start}
+.shop-intro > h1,.shop-intro > .lead{grid-column:1}
+.shop-intro > .quiz{grid-column:2;grid-row:1 / span 2;align-self:center}
+.quiz{position:relative!important;left:auto!important;bottom:auto!important;top:auto!important;right:auto!important;z-index:30;box-shadow:none;width:auto!important;max-height:none!important;overflow:visible!important}
+.quiz.is-open{padding:12px 12px 12px 16px}
+.quiz .quiz-body{position:absolute;top:calc(100% + 8px);right:0;width:340px;max-height:min(70vh,600px);overflow:auto;margin:0;
+  background:#f3f8e8;border:1px solid #d5e3bb;border-radius:16px;padding:16px;box-shadow:0 18px 40px -16px rgba(31,42,34,.45)}
+.quiz .quiz-body:empty{display:none}
+body:has(.drawer.open) .quiz{display:block}
+@media(max-width:600px){
+  .shop-intro{column-gap:12px}
+  .shop-intro > .lead{grid-column:1 / -1}
+  .shop-intro > .quiz{grid-row:1;align-self:center}
+  .quiz,.quiz.is-open{padding:8px 8px 8px 12px}
+  .quiz-k{display:none!important}
+  .quiz-head h2{font-size:.95rem}
+  .quiz .quiz-body{width:calc(100vw - 32px);right:0}
+}
+@media(max-width:600px){.shop-intro{position:relative}.shop-intro > .quiz{position:static!important}.quiz .quiz-body{left:0;right:0;width:auto;top:auto;margin-top:8px}}
+
+/* ── 小測驗：改成全站同款的膠囊按鈕＋白底細線面板（不另做綠色小工具） ── */
+.quiz,.quiz.is-open{background:none!important;border:0!important;padding:0!important;border-radius:0;box-shadow:none!important}
+.shop-intro > .quiz{align-self:end;justify-self:end}
+.quiz-toggle{white-space:nowrap}
+.quiz-toggle[aria-expanded="true"]{background:var(--leaf2);border-color:var(--leaf2);color:#fff}
+.quiz .quiz-body{background:var(--card)!important;border:1px solid var(--line)!important;border-radius:14px!important;box-shadow:0 18px 40px -22px rgba(31,42,34,.35)!important;padding:20px!important;width:360px}
+.quiz-step{font-size:13px;color:var(--ink2);letter-spacing:.04em;margin:0 0 6px}
+.quiz-q{font:700 1.15rem/1.5 var(--sans);margin:0 0 14px}
+.quiz-opts{display:flex!important;flex-wrap:wrap;gap:8px}
+.quiz-opts button{border:1px solid var(--line)!important;background:var(--card)!important;border-radius:99px!important;padding:8px 16px!important;font:500 15px var(--sans)!important;color:var(--ink)}
+.quiz-opts button:hover{border-color:var(--leaf)!important;color:var(--leaf2)}
+.quiz-opts small{display:none}
+.quiz-back{font-size:14px}
+.quiz-res h3{font:700 1.05rem var(--sans);margin:0 0 4px}
+.quiz .quiz-items{gap:0!important;border-top:1px solid var(--line)}
+.quiz .quiz-items li{background:none!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;padding:12px 0!important}
+.quiz-items .why{color:var(--ink2)!important}
+.quiz-again{border:1px solid var(--line)!important;background:var(--card)!important}
+@media(max-width:600px){
+  .shop-intro > .quiz{grid-column:1 / -1;grid-row:auto;justify-self:start;margin-top:14px}
+  .quiz .quiz-body{padding:16px!important}
+  .quiz-toggle{font-size:14px;padding:8px 16px 8px 18px}
+}
+@media(max-width:600px){.quiz .quiz-body{width:auto!important;left:0;right:0}}
+
+/* 手機：小測驗按鈕排在說明文字後面 */
+@media(max-width:600px){
+  .shop-intro > h1{grid-row:1}
+  .shop-intro > .lead{grid-row:2}
+  .shop-intro > .quiz{grid-row:3;margin-top:16px}
+}
+/* 觸控螢幕不要留下「滑鼠移上去」的深綠色（全站膠囊按鈕） */
+@media(hover:none){
+  .text-link:hover{background:rgba(255,255,255,.65);border-color:rgba(63,107,42,.35);color:var(--leaf2);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 6px 18px -12px rgba(43,77,28,.45)}
+  .text-link:active{background:var(--leaf2);border-color:var(--leaf2);color:#fff}
+}
+.quiz-toggle[aria-expanded="true"],.quiz-toggle[aria-expanded="true"]:hover{background:var(--leaf2);border-color:var(--leaf2);color:#fff}
+.quiz .quiz-toggle:not([aria-expanded="true"]){background:rgba(255,255,255,.65);color:var(--leaf2);border:1px solid rgba(63,107,42,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 6px 18px -12px rgba(43,77,28,.45)}
+@media(hover:hover){.quiz .quiz-toggle:not([aria-expanded="true"]):hover{background:var(--leaf2);border-color:var(--leaf2);color:#fff}}
+@media(max-width:600px){.shop-intro > .quiz{margin-top:18px!important}}
+.quiz .quiz-toggle[aria-expanded="true"]{background:var(--leaf2)!important;border-color:var(--leaf2)!important;color:#fff!important}
+
+/* ── 小測驗放在好蔬知識頁的開頭 ── */
+.guide-quiz{margin-top:20px!important;display:inline-block;position:relative!important}
+.guide-quiz .quiz-body{left:0!important;right:auto!important;width:380px!important}
+@media(max-width:600px){.guide-quiz{display:block}.guide-quiz .quiz-body{right:0!important;width:auto!important}}
+
+/* 膠囊按鈕變深綠時不要再有白色內框線和外圈（看起來像兩層框） */
+.text-link:hover,.quiz .quiz-toggle:not([aria-expanded="true"]):hover,.quiz .quiz-toggle[aria-expanded="true"]{box-shadow:none!important}
+.text-link:focus{outline:none}
+.text-link:focus-visible{outline:2px solid var(--leaf2);outline-offset:3px;box-shadow:none}
+.quiz-toggle:focus-visible{outline:2px solid var(--leaf2)!important;outline-offset:3px!important}
+
 /* 對外版本：保險起見，任何漏掉的待辦都不顯示 */
 .tbd,.mockbar{display:none!important}
