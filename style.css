@@ -1355,5 +1355,27 @@ body:not(.adm)>.site-foot{flex-shrink:0}
 .fm-dots button[aria-current="true"]{background:var(--leaf2)}
 @media(max-width:600px){.fm-nav{width:34px;height:34px}.fm-cap{font-size:14px}}
 
+/* ── 手機商品格：一排剛好兩張，不會被切掉；數量和按鈕上下排 ── */
+@media(max-width:600px){
+  .pgrid:not(.rail){grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 12px}
+  .pcard{min-width:0}
+  .pcard h3{font-size:1rem;line-height:1.4}
+  .pcard .price{font-size:1rem}
+  .pcard .row{flex-direction:column;align-items:stretch;gap:8px}
+  .pcard .add-row{flex-wrap:wrap;gap:8px}
+  .pcard .add-row .qty-sm{flex:1 1 100%;justify-content:space-between}
+  .pcard .add-row .btn-small{flex:1 1 100%;padding-left:8px;padding-right:8px}
+}
+
+/* ── 市集分頁（一頁 12 項） ── */
+.shop-pager{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:36px 0 8px}
+.shop-pager button{min-width:44px;height:44px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:500 15px var(--sans);cursor:pointer;transition:border-color .15s,background .15s}
+.shop-pager button:hover:not(:disabled){border-color:var(--leaf)}
+.shop-pager button[aria-current="page"]{background:var(--leaf2);border-color:var(--leaf2);color:#fff}
+.shop-pager button:disabled{opacity:.4;cursor:default}
+.shop-pager span{color:var(--ink2);padding:0 2px}
+.shop-pager-info{flex-basis:100%;text-align:center;margin:4px 0 0;font-size:14px;color:var(--ink2)}
+@media(max-width:420px){.shop-pager{gap:6px}.shop-pager button{min-width:40px;height:40px;padding:0 10px;font-size:14px}}
+
 /* 對外版本：保險起見，任何漏掉的待辦都不顯示 */
 .tbd,.mockbar{display:none!important}

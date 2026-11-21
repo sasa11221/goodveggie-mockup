@@ -247,7 +247,38 @@
   if (cards.length) {
     const q = $('q'), side = $('side'), fbtn = $('filter-btn');
     const norm = (t) => t.toLowerCase().replace(/\s+/g, '');
-    const apply = () => {
+    // 分頁：電腦一頁 12 項、手機 6 項（頁碼記在網址 ?page=，上一頁回來還在同一頁）
+    const mqPhone = matchMedia('(max-width: 600px)');
+    let PER = mqPhone.matches ? 6 : 12;
+    let page = Math.max(1, parseInt(new URLSearchParams(location.search).get('page'), 10) || 1);
+    const pager = document.createElement('nav');
+    pager.className = 'shop-pager'; pager.setAttribute('aria-label', '商品分頁');
+    $('pgrid').after(pager);
+    const setUrl = () => { try { const u = new URL(location.href); if (page > 1) u.searchParams.set('page', page); else u.searchParams.delete('page'); history.replaceState(null, '', u); } catch (e) {} };
+    const paginate = () => {
+      const vis = [...$('pgrid').children].filter((c) => c.matches('.pcard') && !c.dataset.filtered);
+      const pages = Math.max(1, Math.ceil(vis.length / PER)); page = Math.min(page, pages);
+      vis.forEach((c, i) => { c.hidden = Math.floor(i / PER) !== page - 1; });
+      if (pages <= 1) { pager.innerHTML = ''; pager.hidden = true; setUrl(); return; }
+      const nums = []; for (let i = 1; i <= pages; i++) if (i === 1 || i === pages || Math.abs(i - page) <= 1) nums.push(i); else if (nums[nums.length - 1] !== '…') nums.push('…');
+      pager.hidden = false;
+      pager.innerHTML = `<button type="button" data-pg="${page - 1}"${page > 1 ? '' : ' disabled'} aria-label="上一頁">上一頁</button>`
+        + nums.map((n) => n === '…' ? '<span aria-hidden="true">…</span>' : `<button type="button" data-pg="${n}"${n === page ? ' aria-current="page"' : ''} aria-label="第 ${n} 頁">${n}</button>`).join('')
+        + `<button type="button" data-pg="${page + 1}"${page < pages ? '' : ' disabled'} aria-label="下一頁">下一頁</button>`
+        + `<p class="shop-pager-info">第 ${(page - 1) * PER + 1}–${Math.min(page * PER, vis.length)} 項，共 ${vis.length} 項</p>`;
+      setUrl();
+    };
+    // 轉向或縮放跨過手機寬度時，換算成新的頁碼，停在原本看的那幾項
+    const rePer = () => { const want = mqPhone.matches ? 6 : 12; if (want === PER) return; const first = (page - 1) * PER; PER = want; page = Math.floor(first / PER) + 1; paginate(); };
+    mqPhone.addEventListener('change', rePer); window.addEventListener('resize', rePer);
+    pager.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-pg]'); if (!b || b.disabled) return;
+      page = Number(b.dataset.pg); paginate();
+      const top = document.querySelector('.shop-list') || $('pgrid');
+      top.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    });
+    const apply = (keepPage) => {
+      if (keepPage !== true) page = 1;
       const src = [...document.querySelectorAll('input[name=src]:checked')].map((i) => i.value);
       const cat = [...document.querySelectorAll('input[name=cat]:checked')].map((i) => i.value);
       const kw = norm(q.value);
@@ -255,15 +286,17 @@
       cards.forEach((c) => {
         const hit = !kw || norm((c.querySelector('h3')?.textContent || '') + (c.querySelector('.src')?.textContent || '')).includes(kw);
         const ok = hit && src.includes(c.dataset.src) && cat.includes(c.dataset.cat);
+        if (ok) delete c.dataset.filtered; else c.dataset.filtered = '1';
         c.hidden = !ok; n += ok;
       });
+      paginate();
       $('shown').textContent = `共 ${n} 件商品`;
       $('no-result').hidden = n > 0;
       const off = [...side.querySelectorAll('input')].filter((i) => !i.checked).length;
       $('filter-sum').textContent = off ? '（已篩選）' : '';
     };
-    side.querySelectorAll('input').forEach((i) => i.addEventListener('change', apply));
-    q.addEventListener('input', apply);
+    side.querySelectorAll('input').forEach((i) => i.addEventListener('change', () => apply()));
+    q.addEventListener('input', () => apply());
     fbtn.addEventListener('click', () => {
       const o = side.classList.toggle('open');
       fbtn.setAttribute('aria-expanded', o);
@@ -276,16 +309,17 @@
     if (sortSel && grid) {
       const orig = [...cards];
       const price = (c) => Number(c.querySelector('[data-price]')?.dataset.price || 0);
-      sortSel.addEventListener('change', () => {
+      sortSel.addEventListener('change', (ev) => {
         const v = sortSel.value; let list = [...orig];
         if (/low|asc|便宜|低/.test(v)) list.sort((a, b) => price(a) - price(b));
         else if (/high|desc|貴|高/.test(v)) list.sort((a, b) => price(b) - price(a));
         list.forEach((c) => grid.appendChild(c));
+        apply(!ev.isTrusted);   // 使用者自己換排序才回到第 1 頁；載入或返回時保持原本的頁
       });
       const resort = () => sortSel.dispatchEvent(new Event('change'));
       resort(); window.addEventListener('pageshow', resort);
     }
-    apply();
+    apply(true);
   }
 
   // 首頁：大圖淡入淡出輪播（5 秒一張；可按暫停、鍵盤聚焦時暫停；減少動態時不自動播）
