@@ -90,7 +90,7 @@
     const paint = () => {
       const sh = shipOf(items), cold = sh.kind === 'cold';
       renderDays(sh.kind);
-      $('ship-box').innerHTML = `<p class="co-shipway"><b>${sh.name}</b><small>${cold ? '購物車裡有生鮮，整單冷藏寄出，' : ''}${sh.eta}。${sh.what}滿 ${money(sh.free)} 免運，未滿收 ${money(sh.fee)}。</small></p>`;
+      $('ship-box').innerHTML = `<p class="co-shipway"><b>${sh.name}</b><small>${cold ? '購物車裡有生鮮，整單冷藏寄出，' : ''}${sh.eta}。${cold ? '整單滿' : '滿'} ${money(sh.free)} 免運${cold ? '（菇類、乾貨一起算）' : ''}，未滿收 ${money(sh.fee)}。</small></p>`;
       $('addr-box').hidden = !cold; $('store-box').hidden = cold;
       // 生鮮不收貨到付款：拒收的話菜會壞掉、來回運費也是我們出
       const cod = $('pay-cod').querySelector('input');
