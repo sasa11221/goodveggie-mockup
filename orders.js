@@ -37,31 +37,35 @@
 
     // 登入（示意）
     let editing = false;
+    const fmtPhone = (v) => v.replace(/^(\d{4})(\d{3})(\d{3})$/, '$1-$2-$3');
     const showUser = () => {
       const u = load(UKEY, null);
       $('co-login').hidden = !!u; $('co-who').hidden = !u;
-      if (u) {
-        if (!$('f-name').value) $('f-name').value = u.name;
-        if (!$('f-phone').value) $('f-phone').value = u.phone || '';
-        const saved = !!(u.name && /^09\d{8}$/.test(u.phone || ''));
-        if (!editing) {
-          $('me-fields').hidden = saved; $('edit-me').hidden = !saved;
-          $('me-name').textContent = saved ? $('f-name').value : u.name; $('ava').textContent = ($('f-name').value || u.name)[0];
-          $('me-sub').textContent = saved ? `${$('f-phone').value.replace(/^(\d{4})(\d{3})(\d{3})$/, '$1-$2-$3')}・已用 LINE 登入` : '已用 LINE 登入，請補上手機號碼';
-        }
-        // 會員中心存過的資料，結帳時自動帶入
-        if (!$('f-addr').value && u.addr) $('f-addr').value = u.addr;
-        if (!$('f-store').value && u.store711) $('f-store').value = u.store711;
-      }
+      if (!u) return;
+      if (!$('f-name').value) $('f-name').value = u.name || '';
+      if (!$('f-phone').value) $('f-phone').value = u.phone || '';
+      // 會員中心存過的資料，結帳時自動帶入
+      if (!$('f-addr').value && u.addr) $('f-addr').value = u.addr;
+      if (!$('f-store').value && u.store711) $('f-store').value = u.store711;
     };
-    $('line-login').onclick = () => { store(UKEY, { ...(load(UKEY, null) || {}), name: '王小明' }); $('login-err').hidden = true; showUser(); window.dispatchEvent(new Event('gv-user')); $('f-phone').focus(); };
-    $('logout').onclick = () => { try { localStorage.removeItem(UKEY); } catch (e) {} $('f-name').value = ''; $('f-phone').value = ''; showUser(); window.dispatchEvent(new Event('gv-user')); };
+    const syncWho = (cold) => {
+      if (!load(UKEY, null)) return;
+      const name = $('f-name').value.trim(), phone = $('f-phone').value.replace(/\D/g, '');
+      const place = cold ? $('f-addr').value.trim() : $('f-store').value.trim();
+      const saved = !!name && /^09\d{8}$/.test(phone) && !!place;
+      if (!editing) { $('me-fields').hidden = saved; $('edit-me').hidden = !saved; }
+      $('me-name').textContent = [name || '還沒填姓名', phone ? fmtPhone(phone) : ''].filter(Boolean).join('・');
+      $('me-sub').textContent = place ? (cold ? place : `7-11 ${place}`) : (cold ? '還沒填送達地址' : '還沒填取貨門市');
+    };
+    $('line-login').onclick = () => { store(UKEY, { ...(load(UKEY, null) || {}), name: '王小明' }); $('login-err').hidden = true; showUser(); paint(); window.dispatchEvent(new Event('gv-user')); $('f-phone').focus(); };
+    $('logout').onclick = () => { try { localStorage.removeItem(UKEY); } catch (e) {} ['f-name', 'f-phone', 'f-addr', 'f-store'].forEach((k) => { $(k).value = ''; }); editing = false; showUser(); window.dispatchEvent(new Event('gv-user')); };
     // 標題列登入／登出時，結帳頁跟著更新
     window.addEventListener('gv-user', () => { if (!load(UKEY, null)) { $('f-name').value = ''; $('f-phone').value = ''; } else $('login-err').hidden = true; showUser(); paint(); });
-    $('edit-me').onclick = () => { editing = true; $('me-fields').hidden = false; $('edit-me').hidden = true; $('f-name').focus(); };
+    const openFields = () => { editing = true; $('me-fields').hidden = false; $('edit-me').hidden = true; };
+    $('edit-me').onclick = () => { openFields(); $('f-name').focus(); };
     showUser();
 
-    // 訂單內容：直接改數量、移除；「再加購」打開購物車
+    // 商品：直接改數量、移除
     $('sum-lines').addEventListener('click', (e) => {
       const b = e.target.closest('[data-act]'); if (!b) return;
       const i = Number(b.closest('.co-edit').dataset.i), x = items[i]; if (!x) return;
@@ -80,18 +84,19 @@
       const was = form.querySelector('[name=day]:checked')?.value;
       $('days').innerHTML = gvHarvests(3).map((d, i) => {
         const arrive = new Date(d); arrive.setDate(arrive.getDate() + 1);
-        const tip = kind === 'cold' ? `早上採收，${gvFmt(arrive)} 送到` : '當天出貨，約 2 到 3 天到門市';
-        return `<label class="co-opt"><input type="radio" name="day" value="${d.toISOString()}"${i ? '' : ' required'}${was === d.toISOString() ? ' checked' : ''}><span><b>${gvFmt(d)} 出貨</b><small>${i === 0 ? '最近一批・' : ''}${tip}</small></span></label>`;
+        const tip = kind === 'cold' ? `${gvFmt(arrive).split(' ')[0]}送到` : '2–3 天到門市';
+        return `<label class="ck-day"><input type="radio" name="day" value="${d.toISOString()}"${i ? '' : ' required'}${(was ? was === d.toISOString() : i === 0) ? ' checked' : ''}><span><b>${gvFmt(d)}</b><small>${tip}</small></span></label>`;
       }).join('');
-      $('day-sub').textContent = kind === 'cold' ? '萵苣在出貨當天早上採收，連根裝袋，冷藏寄出。' : '每週二、週五出貨。';
+      $('day-sub').textContent = kind === 'cold' ? '萵苣在出貨日早上採收，連根裝袋冷藏寄出。前一天晚上 8 點截單。' : '每週二、週五出貨，前一天晚上 8 點截單。';
     };
     $('farm-note').hidden = !items.some((x) => !String(x.src).includes('食在好蔬'));
 
     const paint = () => {
       const sh = shipOf(items), cold = sh.kind === 'cold';
       renderDays(sh.kind);
-      $('ship-box').innerHTML = `<p class="co-shipway"><b>${sh.name}</b><small>${cold ? '購物車裡有生鮮，整單冷藏寄出，' : ''}${sh.eta}。${cold ? '整單滿' : '滿'} ${money(sh.free)} 免運${cold ? '（菇類、乾貨一起算）' : ''}，未滿收 ${money(sh.fee)}。</small></p>`;
+      $('ship-box').innerHTML = `<div><b>${sh.name}</b><small>${sh.eta}・${cold ? '整單' : ''}滿 ${money(sh.free)} 免運${cold ? '，菇類乾貨一起算' : ''}</small></div><span class="${sh.cost ? '' : 'is-free'}">${sh.cost ? money(sh.cost) : '免運'}</span>`;
       $('addr-box').hidden = !cold; $('store-box').hidden = cold;
+      syncWho(cold);
       // 生鮮不收貨到付款：拒收的話菜會壞掉、來回運費也是我們出
       const cod = $('pay-cod').querySelector('input');
       cod.disabled = cold; $('pay-cod').classList.toggle('is-off', cold);
@@ -101,11 +106,12 @@
       const sub = sumOf(items), tbd = hasTbd(items) ? '＋待填' : '';
       $('sum-sub').textContent = money(sub) + tbd;
       $('sum-ship').textContent = sh.cost ? money(sh.cost) : '免運';
+      $('sum-ship').classList.toggle('is-free', !sh.cost); $('bar-ship').classList.toggle('is-free', !sh.cost);
       $('sum-total').textContent = money(sub + sh.cost) + tbd;
       $('sum-free').innerHTML = sh.left ? `再買 <b>${money(sh.left)}</b> 就免運` : '<b>已達免運</b>';
       $('sum-free').classList.toggle('is-free', !sh.left);
       $('bar-total').textContent = money(sub + sh.cost) + tbd;
-      $('bar-ship').textContent = sh.cost ? `含運費 ${money(sh.cost)}・再買 ${money(sh.left)} 免運` : '已達免運';
+      $('bar-ship').textContent = sh.cost ? `含運費 ${money(sh.cost)}` : '已達免運';
       const d = form.querySelector('[name=day]:checked'), a = cold ? $('f-addr').value.trim() : $('f-store').value.trim();
       if (d) {
         const cut = new Date(d.value); cut.setDate(cut.getDate() - 1);
@@ -117,11 +123,10 @@
     form.addEventListener('input', (e) => {
       if (e.target.id === 'f-addr') { paint(); if (e.target.value.trim()) $('addr-err').hidden = true; }
       if (e.target.id === 'f-store') { paint(); if (e.target.value.trim()) $('store-err').hidden = true; }
+      if (e.target.id === 'f-name' || e.target.id === 'f-phone') paint();
     });
     paint();
     window.addEventListener('gv-cart', () => { if (!emptyCheck()) paint(); });
-    // 手機底部合計列：右側訂單內容的付款按鈕出現在畫面上時就收起來
-    if ('IntersectionObserver' in window) new IntersectionObserver(([en]) => $('co-bar').classList.toggle('is-away', en.isIntersecting)).observe($('submit'));
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -129,8 +134,9 @@
       // 對外預覽站：不建立訂單，請客人改用 LINE
       if (document.body.dataset.preview) {
         let m = document.getElementById('preview-stop');
-        if (!m) { m = document.createElement('p'); m.id = 'preview-stop'; m.className = 'co-hint'; m.setAttribute('role', 'alert'); $('submit').after(m); }
+        if (!m) { m = document.createElement('p'); m.id = 'preview-stop'; m.className = 'co-hint'; m.setAttribute('role', 'alert'); $('co-fine').before(m); }
         m.innerHTML = '這是預覽版網站，還沒開放線上下單，這筆訂單不會送出。想買菜請<a href="https://lin.ee/PJHXHVrQ" rel="noopener">加 LINE 官方帳號</a>訂購。';
+        m.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
       const u = load(UKEY, null);
@@ -143,10 +149,10 @@
         const ok = /^09\d{8}$/.test(phone); $('phone-err').hidden = ok; $('f-phone').setAttribute('aria-invalid', !ok);
         const nameOk = !!$('f-name').value.trim(); $('f-name').setAttribute('aria-invalid', !nameOk); if ($('name-err')) $('name-err').hidden = nameOk;
         if (!nameOk) bad.push($('f-name')); if (!ok) bad.push($('f-phone'));
-        if (!nameOk || !ok) { editing = true; $('me-fields').hidden = false; $('edit-me').hidden = true; }
+        if (!nameOk || !ok) openFields();
       }
       $('addr-err').hidden = true; $('store-err').hidden = true;
-      $(cold ? 'addr-err' : 'store-err').hidden = !!addr; if (!addr) bad.push($(cold ? 'f-addr' : 'f-store'));
+      $(cold ? 'addr-err' : 'store-err').hidden = !!addr; if (!addr) { openFields(); bad.push($(cold ? 'f-addr' : 'f-store')); }
       $('day-err').hidden = !!day; if (!day) bad.push(form.querySelector('[name=day]'));
       if (bad.length) { bad[0].scrollIntoView({ behavior: 'smooth', block: 'center' }); bad[0].focus({ preventScroll: true }); return; }
 

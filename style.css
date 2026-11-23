@@ -1623,6 +1623,165 @@ body:has(.drawer.open) .quiz{display:block}
 .trust-row span{font-size:14px;color:var(--ink2)}
 @media(max-width:900px){.trust-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .co-me{flex-wrap:wrap;row-gap:4px}.co-me .link-btn{white-space:nowrap}.co-me>span:nth-child(2){min-width:0;flex:1 1 160px}
+#sum-ship.is-free,#bar-ship.is-free{color:var(--leaf);font-weight:700}
+
+/* ── 結帳與訂單：字放大、拿掉模板感的裝飾（2026-11-23）──
+   原則：內文 16–17px，輔助文字最小 14px；少用色塊、膠囊、圖示底框 */
+.co{font-size:17px}
+.co-step h2{font-size:1.3rem}
+.co-sub,.co-note{font-size:16px}
+.co-opt b{font-size:17px}
+.co-opt small,.co-me small{font-size:15px;line-height:1.6}
+.co-shipway{border:0;background:none;padding:0;font-size:17px}
+.co-shipway small{font-size:16px}
+.co-memo,.co-fields label{font-size:16px}
+.co-card h2{font-size:1.35rem}
+.co-group h3{font-size:15px}
+.co-line{font-size:16px}
+.co-del{font-size:14px}
+.co-tot{font-size:16px}
+.co-tot .grand{font-size:1.3rem}
+.co-free,.co-pick{font-size:15px}
+.co-fine{font-size:14px;line-height:1.75}
+.co-back{font-size:15px}
+.co-err,.co-hint{font-size:15px}
+.notes-fold>summary span,.notes-fold>summary::after{font-size:15px}
+/* 付款方式：圖示不放色塊底框，卡別用文字列出 */
+.pay-ico{width:auto;height:auto;background:none;border-radius:0;color:var(--ink2)}
+.pay-ico svg{width:26px;height:26px;stroke-width:1.6}
+.pay-chips{gap:0}
+.pay-chips em{border:0;background:none;padding:0;font-size:14px;font-weight:400;letter-spacing:0;color:var(--ink2)}
+.pay-chips em+em::before{content:"・";margin:0 2px}
+/* 手機底部合計列 */
+.co-bar-sum small{font-size:13px}
+.co-bar-sum b{font-size:1.3rem}
+/* 我的訂單 */
+.od-steps{font-size:14px}
+.od-head small,.od-pill{font-size:15px}
+.od-who{font-size:14px}
+/* 首頁購買重點：拿掉左邊色條，字放大 */
+.buy-points .trust-row li{border-left:0;padding-left:0}
+.buy-points .trust-row b{font-size:17px}
+.buy-points .trust-row span{font-size:15px}
+
+/* ── 結帳簡易版（2026-11-23）：灰底＋白色區塊、單欄、底部固定合計 ──
+   顏色只分三種用途：白色區塊放內容、綠色表示「選中／可按」、紅色只給要補的提醒 */
+.ck-page{background:#eceee8}
+.ck-wrap{max-width:660px;padding-bottom:110px}
+.ck-title{font-size:1.6rem;margin:20px 0 14px}
+.co.ck{display:flex;flex-direction:column;gap:10px;padding-bottom:0;font-size:16px}
+.ck-sec{background:#fff;border-radius:12px;padding:16px 18px}
+.ck-sec h2{font:700 17px/1.4 var(--sans);margin:0 0 10px;color:var(--ink)}
+.ck-sub{font:500 15px/1.4 var(--sans);color:var(--ink2);margin:16px 0 8px}
+.ck-small{font-size:14px;line-height:1.7;color:var(--ink2);margin:8px 0 0}
+.ck-link{background:none;border:0;padding:0;font:inherit;font-size:15px;color:var(--leaf);text-decoration:underline;cursor:pointer}
+.ck .co-login{border:0;padding:0;background:none}.ck .co-login p{font-size:15px;margin:0 0 12px}
+/* 收件資料 */
+.ck-me{display:flex;align-items:flex-start;gap:12px}
+.ck-me-txt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.5}
+.ck-me-txt b{font-size:16px}
+.ck-me-txt span{font-size:15px;color:var(--ink2);overflow-wrap:anywhere}
+.ck-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.ck-fields label{display:flex;flex-direction:column;gap:6px;font-size:15px;font-weight:500}
+.ck-fields label[hidden]{display:none}
+.ck-fields input,.ck-note textarea{font:400 16px var(--sans);padding:11px 12px;border:1px solid #d3d9cf;border-radius:8px;background:#fff;color:var(--ink);width:100%}
+.ck-fields input:focus,.ck-note textarea:focus{outline:none;border-color:var(--leaf);box-shadow:0 0 0 3px var(--sprout)}
+.ck-fields input[aria-invalid=true]{border-color:var(--beet)}
+.ck-wide{grid-column:1/-1}
+.ck-fields .ck-small{margin:0}
+/* 配送與出貨日 */
+.ck-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.ck-row b{display:block;font-size:16px}
+.ck-row small{display:block;font-size:14px;color:var(--ink2);line-height:1.6}
+.ck-row>span{font-weight:700;white-space:nowrap}
+.ck-row>span.is-free{color:var(--leaf)}
+.ck-days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ck-day{position:relative;cursor:pointer}
+.ck-day input{position:absolute;opacity:0;pointer-events:none}
+.ck-day span{display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px 4px;border:1px solid #d3d9cf;border-radius:10px;line-height:1.4}
+.ck-day b{font-size:15px;font-weight:500}
+.ck-day small{font-size:13px;color:var(--ink2)}
+.ck-day input:checked+span{border:2px solid var(--leaf);padding:9px 3px;background:#f3f8ec}
+.ck-day input:checked+span b{color:var(--leaf2);font-weight:700}
+.ck-day input:focus-visible+span{box-shadow:0 0 0 3px var(--sprout)}
+/* 商品 */
+.ck .co-group{padding:6px 0;border-bottom:1px solid #eef0ea}
+.ck .co-group:last-child{border-bottom:0}
+.ck .co-group h3{font:500 14px var(--sans);color:var(--ink2);margin:4px 0}
+.ck-more{display:inline-block;margin-top:8px}
+/* 付款方式：用分隔線，不用一格一格的框 */
+.ck-pay{display:flex;flex-direction:column}
+.ck-opt{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid #eef0ea;cursor:pointer}
+.ck-opt:last-child{border-bottom:0}
+.ck-opt input{accent-color:var(--leaf);width:18px;height:18px;margin-top:3px;flex:none}
+.ck-opt-main{display:flex;flex-direction:column;line-height:1.5}
+.ck-opt b{font-size:16px;font-weight:500}
+.ck-opt input:checked~.ck-opt-main b{font-weight:700}
+.ck-opt small{font-size:14px;color:var(--ink2)}
+.ck-opt.is-off{opacity:.45;cursor:not-allowed}
+.ck-note{margin-top:6px}
+.ck-note summary{font-size:15px;color:var(--leaf);cursor:pointer;list-style:none;text-decoration:underline}
+.ck-note summary::-webkit-details-marker{display:none}
+.ck-note textarea{margin-top:8px;resize:vertical}
+/* 金額 */
+.ck-total .co-tot{margin:0}
+.ck-total .co-free{margin:8px 0 0}
+/* 底部合計列：所有螢幕都固定在底部 */
+.co-bar.ck-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;position:fixed;left:0;right:0;bottom:0;z-index:40;
+  background:#fff;border-top:1px solid #dfe3db;box-shadow:0 -4px 14px rgba(31,42,34,.06);
+  padding:10px max(16px,calc((100% - 660px)/2 + 16px)) calc(10px + env(safe-area-inset-bottom,0px));transform:none}
+.ck-bar .btn{flex:none;border:0;cursor:pointer;font:500 16px var(--sans);padding:12px 24px}
+body:has(.ck-bar) .site-foot{padding-bottom:110px}
+.ck-page .notes{margin-top:10px;border:0}
+@media(max-width:600px){
+  .ck-wrap{padding-left:10px;padding-right:10px}
+  .ck-title{font-size:1.4rem;margin:14px 6px 10px}
+  .ck-fields{grid-template-columns:1fr}
+  .ck-sec{padding:14px 16px}
+}
+.ck-sec{width:100%;max-width:none;margin:0;box-sizing:border-box}
+.ck-wrap{padding-bottom:24px}.ck-page .notes-fold{padding:16px 18px;border-radius:12px;margin:10px 0 0}.ck-page .notes-fold>summary h2{font:700 17px/1.4 var(--sans)}.ck-page .notes-fold>summary span{font-size:14px}
+
+/* ── 結帳 v3（2026-11-23）：手機單欄用分隔線，桌機左右兩欄、右側訂單摘要固定 ── */
+.ck-page{background:var(--bg)}
+.co.ck{gap:0}
+.ck-sec{background:none;border-radius:0;padding:18px 0;border-top:1px solid var(--line)}
+.ck-sec h2{font:700 18px/1.4 var(--sans);margin:0 0 12px}
+.ck-side-btn{display:none}
+/* 手機：兩個欄位容器攤平，依「收件→配送→商品→付款→金額」排 */
+.ck-main,.ck-side{display:contents}
+.ck-who{order:1;border-top:0;padding-top:4px}.ck-ship{order:2}.ck-items{order:3}.ck-paysec{order:4}.ck-total{order:5}
+@media(max-width:600px){.ck-wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}.ck-title{margin:14px 0 6px}.ck-sec{padding:16px 0}}
+/* 桌機：左邊填資料，右邊是唯一一張卡片（商品＋金額＋按鈕），跟著捲動 */
+@media(min-width:901px){
+  .ck-wrap{max-width:1080px}
+  .ck-title{margin:28px 0 8px}
+  .co.ck{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:48px;align-items:start}
+  .ck-main{display:block}
+  .ck-side{display:block;position:sticky;top:96px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-top:18px}
+  .ck-side .ck-sec{border-top:0;padding:0}
+  .ck-side .ck-total{border-top:1px solid var(--line);margin-top:14px;padding-top:14px}
+  .ck-side-btn{display:block;width:100%;margin-top:16px;border:0;cursor:pointer;font:500 17px var(--sans);padding:14px}
+  .co-bar.ck-bar{display:none}
+  body:has(.ck-bar) .site-foot{padding-bottom:48px}
+  .ck-page .notes-fold{max-width:none}
+}
+@media(min-width:901px){.ck-title{margin:28px 0 20px;font-size:1.75rem}.ck-main .ck-who{padding-top:0}}
+/* 結帳 v3 微調：標題放大、分隔線加深、購買須知和上方拉開 */
+.ck-sec{border-top:1px solid #c9d1c2;padding:22px 0}
+.ck-sec h2{font:700 21px/1.35 var(--sans);margin:0 0 14px;color:var(--ink)}
+.ck-who{border-top:0}
+.ck-page .notes-fold{margin-top:40px}
+@media(max-width:600px){.ck-sec{padding:20px 0}.ck-sec h2{font-size:20px}}
+@media(min-width:901px){
+  .ck-main .ck-sec{padding:26px 0}
+  .ck-main .ck-who{padding-top:0}
+  .ck-side .ck-sec h2{font-size:20px}
+  .ck-side .ck-total{border-top:1px solid #c9d1c2}
+  .ck-page .notes-fold{margin-top:56px}
+}
+.ck-page #co-notes{margin:40px 0 48px}@media(min-width:901px){.ck-page #co-notes{margin:56px 0 64px}}
+@media(min-width:901px){.ck-side{position:static}}
 
 /* 對外版本：保險起見，任何漏掉的待辦都不顯示 */
 .tbd,.mockbar{display:none!important}

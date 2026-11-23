@@ -12,7 +12,7 @@
 <meta property="og:type" content="website"><meta property="og:site_name" content="食在好蔬"><meta property="og:locale" content="zh_TW">
 <meta property="og:title" content="結帳｜食在好蔬"><meta property="og:description" content="確認訂購人、配送地址、出貨日和付款方式，完成訂單。">
 <meta property="og:url" content="https://sasa11221.github.io/goodveggie-mockup/checkout.html"><meta property="og:image" content="https://sasa11221.github.io/goodveggie-mockup/img/site/site-3.jpg"><meta property="og:image:width" content="1600"><meta property="og:image:height" content="1200"><meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Organization","OnlineStore"],"@id":"https://sasa11221.github.io/goodveggie-mockup/#org","name":"食在好蔬","alternateName":"Good Veggie","url":"https://sasa11221.github.io/goodveggie-mockup/","logo":"https://sasa11221.github.io/goodveggie-mockup/img/logo-128.png","email":"chihaoshu@eatgoodveg.com","description":"北投魚菜共生農場當天採收、不用農藥和化肥的萵苣，和實地拜訪過的合作農場好物，在同一個市集買齊。個人、公司團體、餐廳都可以訂購。","address":{"@type":"PostalAddress","streetAddress":"一德里學園路","addressLocality":"北投區","addressRegion":"臺北市","addressCountry":"TW"},"areaServed":{"@type":"Country","name":"TW"},"sameAs":["https://lin.ee/PJHXHVrQ","https://eatgoodveg.com/"],"knowsAbout":["魚菜共生","水耕萵苣","不用農藥的蔬菜","在地農產"]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首頁","item":"https://sasa11221.github.io/goodveggie-mockup/"},{"@type":"ListItem","position":2,"name":"市集","item":"https://sasa11221.github.io/goodveggie-mockup/shop.html"},{"@type":"ListItem","position":3,"name":"結帳","item":"https://sasa11221.github.io/goodveggie-mockup/checkout.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Organization","OnlineStore"],"@id":"https://sasa11221.github.io/goodveggie-mockup/#org","name":"食在好蔬","alternateName":"Good Veggie","url":"https://sasa11221.github.io/goodveggie-mockup/","logo":"https://sasa11221.github.io/goodveggie-mockup/img/logo-128.png","email":"chihaoshu@eatgoodveg.com","description":"北投魚菜共生農場當天採收、不用農藥和化肥的萵苣，和實地拜訪過的合作農場好物，在同一個市集買齊。個人、公司團體、餐廳都可以訂購。","address":{"@type":"PostalAddress","streetAddress":"一德里學園路","addressLocality":"北投區","addressRegion":"臺北市","addressCountry":"TW"},"areaServed":{"@type":"Country","name":"TW"},"sameAs":["https://lin.ee/PJHXHVrQ","https://eatgoodveg.com/"],"knowsAbout":["魚菜共生","水耕萵苣","不用農藥的蔬菜","在地農產"]}]}</script>
 <!--/seo-->
 <link rel="stylesheet" href="style.css">
 </head><body data-preview="1">
@@ -22,76 +22,71 @@
   <div class="head-acts"><button class="cart" id="cart-open" type="button" aria-label="購物車"><svg class="cart-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.2l2.1 10.1a2 2 0 0 0 2 1.6h7.5a2 2 0 0 0 1.9-1.5L20.5 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg><span class="count" id="count">0</span></button><button class="line-login" id="line-login-h" type="button"><img class="line-ico" src="img/line-icon.png" alt=""><span>LINE 登入</span></button><div class="user-menu" id="user-menu" hidden><button class="user-chip" id="user-chip" type="button" aria-haspopup="true" aria-expanded="false"><span class="ava" id="user-ava">王</span><span class="nm" id="user-nm">王小明</span></button><div class="user-pop" id="user-pop" hidden><a href="account.html">會員中心</a><a href="orders.html">我的訂單</a><button type="button" id="logout-h">登出</button></div></div></div>
   <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="開啟選單"><span></span><span></span><span></span></button>
 </div></header>
-<main>
-<div class="container">
-  <nav class="crumbs" aria-label="麵包屑"><ol><li><a href="index.html">首頁</a></li><li><a href="shop.html">市集</a></li><li aria-current="page">結帳</li></ol></nav>
-  <div class="page-intro"><h1>結帳</h1><p class="lead">選好出貨日、付完款，訂單就成立。運費依購物車內容自動計算。</p></div>
+<main class="ck-page">
+<div class="container ck-wrap">
+  <h1 class="ck-title">結帳</h1>
 
   <div class="co-empty" id="co-empty" hidden>
     <p>購物車是空的，先到市集挑這週採收的菜吧。</p>
     <a class="btn" href="shop.html">去市集逛逛</a>
   </div>
 
-  <form class="co" id="co" novalidate>
-    <div class="co-main">
-      <section class="co-step" aria-labelledby="s1"><h2 id="s1"><span class="co-n">1</span>聯絡資料</h2>
-        <div class="co-login" id="co-login">
-          <p>用 LINE 登入後會自動帶入姓名，訂單狀態也會傳到你的 LINE。不用另外註冊。</p>
-          <button type="button" class="btn-line" id="line-login"><img class="line-ico" src="img/line-icon.png" alt="">用 LINE 登入</button>
-          <p class="co-hint" id="login-err" hidden>請先用 LINE 登入。</p>
-        </div>
-        <div class="co-who" id="co-who" hidden>
-          <p class="co-me"><span class="co-ava" id="ava">王</span><span><b id="me-name">王小明</b><small id="me-sub">已用 LINE 登入（示意帳號）</small></span><button type="button" class="link-btn" id="edit-me" hidden>修改</button><button type="button" class="link-btn" id="logout">換一個帳號</button></p>
-          <div class="co-fields" id="me-fields">
-            <label>聯絡人姓名<input id="f-name" autocomplete="name" required aria-describedby="name-err"></label><p class="co-err" id="name-err" hidden>請填聯絡人姓名</p>
-            <label>手機號碼<input id="f-phone" inputmode="tel" autocomplete="tel" placeholder="0912345678" required><small class="co-err" id="phone-err" hidden>請輸入 09 開頭的 10 位數手機號碼</small></label>
-          </div>
-        </div>
-        <p class="co-note">公司、團體或大量訂購，請<a href="https://lin.ee/PJHXHVrQ" rel="noopener">用 LINE 跟我們聯絡</a>。</p>
-      </section>
-
-      <section class="co-step" aria-labelledby="s2"><h2 id="s2"><span class="co-n">2</span>送到哪裡</h2>
-        <div class="co-ship" id="ship-box"></div>
-        <div id="addr-box"><label class="co-memo co-addr">送達地址<input id="f-addr" autocomplete="street-address" placeholder="例如：台北市北投區學園路 1 號 3 樓"><small class="co-err" id="addr-err" hidden>請填寫送達地址</small></label></div>
-        <div id="store-box" hidden><label class="co-memo co-addr">7-11 取貨門市<input id="f-store" placeholder="例如：北投學園門市"><small class="co-err" id="store-err" hidden>請填寫取貨門市</small></label>
-          <p class="co-note">正式上線後改成 7-11 電子地圖選門市。</p></div>
-      </section>
-
-      <section class="co-step" aria-labelledby="s3"><h2 id="s3"><span class="co-n">3</span>哪一天出貨</h2>
-        <p class="co-sub" id="day-sub">萵苣在出貨當天早上採收，連根裝袋送出。</p>
-        <div class="co-opts co-days" id="days" role="radiogroup" aria-labelledby="s3"></div>
-        <p class="co-hint" id="day-err" hidden>請選一個出貨日。</p>
-        <p class="co-note" id="farm-note" hidden>合作農場的商品會和萵苣一起裝箱，冷藏寄出。</p>
-      </section>
-
-      <section class="co-step" aria-labelledby="s4"><h2 id="s4"><span class="co-n">4</span>付款方式</h2>
-        <div class="co-opts co-pay" role="radiogroup" aria-labelledby="s4">
-          <label class="co-opt"><input type="radio" name="pay" value="信用卡" checked><i class="pay-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19M6 15h4"/></svg></i><span><b>信用卡</b><small>付款完成，訂單馬上成立</small><span class="pay-chips"><em>VISA</em><em>Mastercard</em><em>JCB</em></span></span></label>
-          <label class="co-opt"><input type="radio" name="pay" value="ATM 轉帳"><i class="pay-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5 12 4l9 5.5M4.5 10v8M9.5 10v8M14.5 10v8M19.5 10v8M3 20h18"/></svg></i><span><b>ATM 轉帳</b><small>拿到專屬轉帳帳號，出貨前一天晚上 8 點前轉帳；逾時自動取消</small><span class="pay-chips"><em>ATM</em><em>網路銀行</em></span></span></label>
-          <label class="co-opt" id="pay-cod"><input type="radio" name="pay" value="貨到付款"><i class="pay-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6.5" width="19" height="11" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 10v4M18 10v4"/></svg></i><span><b>貨到付款</b><small id="cod-hint">收到時付給司機</small><span class="pay-chips"><em>現金</em></span></span></label>
-        </div>
-        <p class="co-note">由統一金流 PAYUNi 處理付款，我們不會看到你的卡號。</p>
-        <label class="co-memo">備註（選填）<textarea id="f-note" rows="2" placeholder="例如：會請同事代領"></textarea></label>
-      </section>
-    </div>
-
-    <aside class="co-sum" aria-labelledby="sum-h">
-      <div class="co-card">
-        <h2 id="sum-h">訂單內容</h2>
-        <div id="sum-lines"></div>
-        <dl class="co-tot">
-          <div><dt>小計</dt><dd id="sum-sub">NT$0</dd></div>
-          <div><dt>運費</dt><dd id="sum-ship">NT$0</dd></div>
-          <div class="grand"><dt>合計</dt><dd id="sum-total">NT$0</dd></div>
-        </dl>
-        <p class="co-free" id="sum-free"></p>
-        <p class="co-pick" id="sum-pick">還沒填送達地址和出貨日</p>
-        <button type="submit" class="btn co-submit" id="submit">付款並送出</button>
-        <p class="co-fine" id="co-fine">付款完成訂單就成立，LINE 會通知你。出貨前一天中午 12 點前，可以在「我的訂單」自己取消，全額退款。</p>
-        <a class="co-back" href="shop.html">← 繼續逛市集</a>
+  <form class="co ck" id="co" novalidate>
+    <div class="ck-main">
+    <section class="ck-sec ck-who" aria-labelledby="s1"><h2 id="s1">收件資料</h2>
+      <div class="co-login" id="co-login">
+        <p>用 LINE 登入，姓名、電話、地址會自動帶入，訂單狀態也會傳到你的 LINE。</p>
+        <button type="button" class="btn-line" id="line-login"><img class="line-ico" src="img/line-icon.png" alt="">用 LINE 登入</button>
+        <p class="co-hint" id="login-err" hidden>請先用 LINE 登入。</p>
       </div>
+      <div class="co-who" id="co-who" hidden>
+        <div class="ck-me"><div class="ck-me-txt"><b id="me-name">王小明</b><span id="me-sub"></span></div><button type="button" class="ck-link" id="edit-me" hidden>修改</button></div>
+        <div class="ck-fields" id="me-fields">
+          <label>姓名<input id="f-name" autocomplete="name" required aria-describedby="name-err"><small class="co-err" id="name-err" hidden>請填姓名</small></label>
+          <label>手機<input id="f-phone" inputmode="tel" autocomplete="tel" placeholder="0912345678" required><small class="co-err" id="phone-err" hidden>請輸入 09 開頭的 10 位數手機號碼</small></label>
+          <label class="ck-wide" id="addr-box">送達地址<input id="f-addr" autocomplete="street-address" placeholder="例如：台北市北投區學園路 1 號 3 樓"><small class="co-err" id="addr-err" hidden>請填寫送達地址</small></label>
+          <label class="ck-wide" id="store-box" hidden>7-11 取貨門市<input id="f-store" placeholder="例如：北投學園門市"><small class="co-err" id="store-err" hidden>請填寫取貨門市</small></label>
+          <p class="ck-small ck-wide"><button type="button" class="ck-link" id="logout">換一個 LINE 帳號</button></p>
+        </div>
+      </div>
+    </section>
+    <section class="ck-sec ck-ship" aria-labelledby="s2"><h2 id="s2">配送</h2>
+      <div class="ck-row" id="ship-box"></div>
+      <h3 class="ck-sub" id="s3">出貨日</h3>
+      <div class="ck-days" id="days" role="radiogroup" aria-labelledby="s3"></div>
+      <p class="co-hint" id="day-err" hidden>請選一個出貨日。</p>
+      <p class="ck-small" id="day-sub"></p>
+      <p class="ck-small" id="farm-note" hidden>合作農場的商品會和萵苣一起裝箱寄出。</p>
+    </section>
+    <section class="ck-sec ck-paysec" aria-labelledby="s4"><h2 id="s4">付款方式</h2>
+      <div class="ck-pay" role="radiogroup" aria-labelledby="s4">
+        <label class="ck-opt"><input type="radio" name="pay" value="信用卡" checked><span class="ck-opt-main"><b>信用卡</b><small>VISA・Mastercard・JCB，付款完成訂單就成立</small></span></label>
+        <label class="ck-opt"><input type="radio" name="pay" value="ATM 轉帳"><span class="ck-opt-main"><b>ATM 轉帳</b><small>出貨前一天晚上 8 點前轉帳，逾時自動取消</small></span></label>
+        <label class="ck-opt" id="pay-cod"><input type="radio" name="pay" value="貨到付款"><span class="ck-opt-main"><b>貨到付款</b><small id="cod-hint">收到時付給司機</small></span></label>
+      </div>
+      <details class="ck-note"><summary>加備註（選填）</summary><textarea id="f-note" rows="2" placeholder="例如：會請同事代領"></textarea></details>
+    </section>
+    </div>
+    <aside class="ck-side" aria-label="訂單摘要">
+    <section class="ck-sec ck-items" aria-labelledby="sum-h"><h2 id="sum-h">商品</h2>
+      <div id="sum-lines"></div>
+      <a class="ck-link ck-more" href="shop.html">＋ 繼續選購</a>
+    </section>
+    <section class="ck-sec ck-total" aria-label="金額">
+      <dl class="co-tot">
+        <div><dt>商品小計</dt><dd id="sum-sub">NT$0</dd></div>
+        <div><dt>運費</dt><dd id="sum-ship">NT$0</dd></div>
+        <div class="grand"><dt>合計</dt><dd id="sum-total">NT$0</dd></div>
+      </dl>
+      <p class="co-free" id="sum-free"></p>
+      <p class="ck-small" id="co-fine">付款完成訂單就成立，LINE 會通知你。</p>
+      <p class="ck-small">由統一金流 PAYUNi 處理付款，我們不會看到你的卡號。公司、團體或大量訂購，請<a href="https://lin.ee/PJHXHVrQ" rel="noopener">用 LINE 跟我們聯絡</a>。</p>
+      <p id="sum-pick" hidden></p>
+      <button type="submit" class="btn ck-side-btn">付款並送出</button>
+    </section>
     </aside>
-    <div class="co-bar" id="co-bar"><div class="co-bar-sum"><small>合計</small><b id="bar-total">NT$0</b><small id="bar-ship"></small></div><button type="submit" class="btn">付款並送出</button></div>
+
+    <div class="co-bar ck-bar" id="co-bar"><div class="co-bar-sum"><small>合計</small><b id="bar-total">NT$0</b><small id="bar-ship"></small></div><button type="submit" class="btn" id="submit">付款並送出</button></div>
   </form>
   <details class="notes notes-fold" id="co-notes"><summary><h2>購買須知</h2><span>配送、付款、退換貨</span></summary>
   <div class="notes-grid">
