@@ -200,13 +200,15 @@
   });
   render();
   // 給結帳頁用：讀購物車、送出後清空
-  window.gvCart = { items: cart, clear: () => { cart.length = 0; render(); } };
+  window.gvCart = { items: cart, clear: () => { cart.length = 0; render(); }, refresh: () => render(), open,
+    canAdd: (x) => (isPack(x) ? packTotal() < PACK_LIMIT : true) && x.qty < 10 };
 
   // ── 採收日：每週二、週五（示意，正式版由後台排程）──
   const WD = '日一二三四五六';
-  window.gvHarvests = (n = 3) => {
-    const out = [], d = new Date(); d.setHours(0, 0, 0, 0);
-    if (new Date().getHours() >= 20) d.setDate(d.getDate() + 1); // 晚上 8 點後下單排到下一批
+  // 截單：出貨前一天晚上 8 點。當天不能選當天（菜早上已經採收出貨了）
+  window.gvHarvests = (n = 3, now = new Date()) => {
+    const out = [], d = new Date(now); d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + (now.getHours() >= 20 ? 2 : 1));
     while (out.length < n) { if (d.getDay() === 2 || d.getDay() === 5) out.push(new Date(d)); d.setDate(d.getDate() + 1); }
     return out;
   };
@@ -220,10 +222,9 @@
   if (!orders) {
     const h = gvHarvests(1)[0], past = new Date(h); past.setDate(past.getDate() - 7);
     orders = [
-      { id: 'GV-示意-002', demo: true, status: 'ready', created: new Date().toISOString(), addr: '台北市北投區學園路 1 號', day: h.toISOString(), pay: '銀行轉帳', name: '王小明', phone: '0912345678', team: null,
+      { id: 'GV-示意-002', demo: true, status: 'ready', created: new Date().toISOString(), addr: '台北市北投區學園路 1 號', day: h.toISOString(), pay: '信用卡', name: '王小明', phone: '0912345678', team: null,
         items: [{ name: '農場搭配萵苣包', price: 200, qty: 2, src: '食在好蔬 北投農場', pack: true, unit: '包' }, { name: '有機乾燥猴頭菇', price: 220, qty: 1, src: '添丁養生黑木耳（桃園大溪）', unit: '包' }] },
-      { id: 'GV-示意-001', demo: true, status: 'done', created: past.toISOString(), addr: '台北市內湖區瑞光路 100 號 8 樓', day: past.toISOString(), pay: '開發票請款', name: '王小明', phone: '0912345678',
-        team: { org: '好日子設計有限公司', tax: '12345678', split: true, list: '' },
+      { id: 'GV-示意-001', demo: true, status: 'done', created: past.toISOString(), addr: '台北市內湖區瑞光路 100 號 8 樓', day: past.toISOString(), pay: '貨到付款', name: '王小明', phone: '0912345678', team: null,
         items: [{ name: '農場搭配萵苣包', price: 200, qty: 10, src: '食在好蔬 北投農場', pack: true, unit: '包' }, { name: '有機乾燥香菇', price: 220, qty: 4, src: '添丁養生黑木耳（桃園大溪）', unit: '包' }] },
     ];
     store(OKEY, orders);

@@ -38,15 +38,15 @@
 - [五福XO醬](https://sasa11221.github.io/goodveggie-mockup/item-td-xo.html)：用菇做的 XO 醬。NT$250／罐，在食在好蔬和北投萵苣一起結帳。
 
 ## 12 種蔬菜
-- [芝麻葉](https://sasa11221.github.io/goodveggie-mockup/veg-arugula.html)：帶獨特芝麻香與微辛辣，是義式料理的靈魂葉菜。北投魚菜共生農場無農藥栽種。
-- [皺葉萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-frilly.html)：細密皺葉造型，是沙拉視覺層次的擔當，咬感清脆。北投魚菜共生農場無農藥栽種。
-- [綠奶油萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-green-butter.html)：口感清爽多汁、纖維細緻、完全無苦味，是萬用沙拉葉。北投魚菜共生農場無農藥栽種。
-- [綠火焰萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-green-flame.html)：微微捲曲的葉片，咬感清脆，百搭好食材。北投魚菜共生農場無農藥栽種。
-- [綠橡木萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-green-oak.html)：經典橡葉造型，溫和的草本香氣，咬感層次分明。北投魚菜共生農場無農藥栽種。
-- [羽衣甘藍](https://sasa11221.github.io/goodveggie-mockup/veg-kale.html)：舉世聞名的超級食物 (Superfood)，營養密度極高。北投魚菜共生農場無農藥栽種。
-- [紅奶油萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-red-butter.html)：葉片柔嫩肥厚，咬下去帶淡淡奶香尾韻，是水耕萵苣中最受家庭歡迎的入門款。北投魚菜共生農場無農藥栽種。
-- [紅火焰萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-red-flame.html)：葉緣捲曲帶火焰般的紅暈漸層，富含花青素。北投魚菜共生農場無農藥栽種。
-- [紅橡木萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-red-oak.html)：深紅色澤帶橡葉造型，視覺與口感兼具的優雅萵苣。北投魚菜共生農場無農藥栽種。
-- [蘿蔓萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-romaine.html)：挺立葉片、清脆口感，經典凱薩沙拉的主角。北投魚菜共生農場無農藥栽種。
-- [甜脆萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-sweet-crisp.html)：咬感清脆甜潤，比一般萵苣更耐熱、更適合熟食。北投魚菜共生農場無農藥栽種。
-- [甜蘿蔓萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-sweet-romaine.html)：比一般蘿蔓更甜更嫩的改良品種，連小孩與長輩都喜歡。北投魚菜共生農場無農藥栽種。
+- [芝麻葉](https://sasa11221.github.io/goodveggie-mockup/veg-arugula.html)：帶獨特芝麻香與微辛辣，是義式料理的靈魂葉菜。北投魚菜共生農場栽種，不用農藥和化肥。
+- [皺葉萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-frilly.html)：細密皺葉造型，是沙拉視覺層次的擔當，咬感清脆。北投魚菜共生農場栽種，不用農藥和化肥。
+- [綠奶油萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-green-butter.html)：口感清爽多汁、纖維細緻、完全無苦味，是萬用沙拉葉。北投魚菜共生農場栽種，不用農藥和化肥。
+- [綠火焰萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-green-flame.html)：微微捲曲的葉片，咬感清脆，百搭好食材。北投魚菜共生農場栽種，不用農藥和化肥。
+- [綠橡木萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-green-oak.html)：經典橡葉造型，溫和的草本香氣，咬感層次分明。北投魚菜共生農場栽種，不用農藥和化肥。
+- [羽衣甘藍](https://sasa11221.github.io/goodveggie-mockup/veg-kale.html)：葉片厚實捲曲，適合打汁、清炒或烤成脆片。北投魚菜共生農場栽種，不用農藥和化肥。
+- [紅奶油萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-red-butter.html)：葉片柔嫩肥厚，咬下去帶淡淡奶香尾韻，是水耕萵苣中最受家庭歡迎的入門款。北投魚菜共生農場栽種，不用農藥和化肥。
+- [紅火焰萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-red-flame.html)：葉緣捲曲，帶火焰般的紅暈漸層。北投魚菜共生農場栽種，不用農藥和化肥。
+- [紅橡木萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-red-oak.html)：深紅色澤帶橡葉造型，視覺與口感兼具的優雅萵苣。北投魚菜共生農場栽種，不用農藥和化肥。
+- [蘿蔓萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-romaine.html)：挺立葉片、清脆口感，經典凱薩沙拉的主角。北投魚菜共生農場栽種，不用農藥和化肥。
+- [甜脆萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-sweet-crisp.html)：咬感清脆甜潤，比一般萵苣更耐熱、更適合熟食。北投魚菜共生農場栽種，不用農藥和化肥。
+- [甜蘿蔓萵苣](https://sasa11221.github.io/goodveggie-mockup/veg-sweet-romaine.html)：比一般蘿蔓更甜更嫩的改良品種，連小孩與長輩都喜歡。北投魚菜共生農場栽種，不用農藥和化肥。

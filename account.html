@@ -6,16 +6,17 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="img/favicon-48.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=optional">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap">
 <!--seo-->
 <link rel="canonical" href="https://sasa11221.github.io/goodveggie-mockup/account.html">
 <meta property="og:type" content="website"><meta property="og:site_name" content="食在好蔬"><meta property="og:locale" content="zh_TW">
 <meta property="og:title" content="會員中心｜食在好蔬"><meta property="og:description" content="管理你的聯絡資料、配送地址和公司資料，結帳時自動帶入。">
 <meta property="og:url" content="https://sasa11221.github.io/goodveggie-mockup/account.html"><meta property="og:image" content="https://sasa11221.github.io/goodveggie-mockup/img/site/site-3.jpg"><meta property="og:image:width" content="1600"><meta property="og:image:height" content="1200"><meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Organization","OnlineStore"],"@id":"https://sasa11221.github.io/goodveggie-mockup/#org","name":"食在好蔬","alternateName":"Good Veggie","url":"https://sasa11221.github.io/goodveggie-mockup/","logo":"https://sasa11221.github.io/goodveggie-mockup/img/logo-128.png","email":"chihaoshu@eatgoodveg.com","description":"北投魚菜共生農場當天採收、不用農藥和化肥的萵苣，和實地拜訪過的合作農場好物，在同一個市集買齊。個人、公司團體、餐廳都可以訂購。","address":{"@type":"PostalAddress","streetAddress":"一德里學園路","addressLocality":"北投區","addressRegion":"臺北市","addressCountry":"TW"},"areaServed":{"@type":"Country","name":"TW"},"sameAs":["https://lin.ee/PJHXHVrQ","https://eatgoodveg.com/"],"knowsAbout":["魚菜共生","水耕萵苣","無農藥蔬菜","在地農產"]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首頁","item":"https://sasa11221.github.io/goodveggie-mockup/"},{"@type":"ListItem","position":2,"name":"會員中心","item":"https://sasa11221.github.io/goodveggie-mockup/account.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Organization","OnlineStore"],"@id":"https://sasa11221.github.io/goodveggie-mockup/#org","name":"食在好蔬","alternateName":"Good Veggie","url":"https://sasa11221.github.io/goodveggie-mockup/","logo":"https://sasa11221.github.io/goodveggie-mockup/img/logo-128.png","email":"chihaoshu@eatgoodveg.com","description":"北投魚菜共生農場當天採收、不用農藥和化肥的萵苣，和實地拜訪過的合作農場好物，在同一個市集買齊。個人、公司團體、餐廳都可以訂購。","address":{"@type":"PostalAddress","streetAddress":"一德里學園路","addressLocality":"北投區","addressRegion":"臺北市","addressCountry":"TW"},"areaServed":{"@type":"Country","name":"TW"},"sameAs":["https://lin.ee/PJHXHVrQ","https://eatgoodveg.com/"],"knowsAbout":["魚菜共生","水耕萵苣","不用農藥的蔬菜","在地農產"]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首頁","item":"https://sasa11221.github.io/goodveggie-mockup/"},{"@type":"ListItem","position":2,"name":"會員中心","item":"https://sasa11221.github.io/goodveggie-mockup/account.html"}]}]}</script>
 <!--/seo-->
 <link rel="stylesheet" href="style.css">
-</head><body>
+</head><body data-preview="1">
+<div class="preview-bar">這是預覽版網站，還沒開放線上下單。想買菜請<a href="https://lin.ee/PJHXHVrQ" rel="noopener">加 LINE 官方帳號</a>訂購。</div>
 <header class="site-head"><div class="container head-row">
   <a class="logo" href="index.html"><img src="img/logo-128.png" alt="" width="38" height="38"><span class="logo-text"><b>食在好蔬</b></span></a>
   <nav aria-label="主選單"><ul class="nav" id="nav"><li><a href="shop.html">市集</a></li><li><a href="veggies.html">我們的好蔬</a></li><li><a href="farms.html">合作農場</a></li><li><a href="story.html">品牌故事</a></li><li><a href="faq.html">購物說明</a></li><li class="nav-orders"><a href="orders.html">我的訂單</a></li></ul></nav>
@@ -47,16 +48,6 @@
             <label>手機號碼<input id="a-phone" inputmode="tel" autocomplete="tel" placeholder="0912345678"><small class="co-err" id="a-phone-err" hidden>請輸入 09 開頭的 10 位數手機號碼</small></label>
           </div>
           <label class="co-memo">常用送達地址<input id="a-addr" autocomplete="street-address" placeholder="例如：台北市北投區學園路 1 號 3 樓"></label>
-          <fieldset class="acc-type"><legend>平常怎麼訂</legend>
-            <div class="co-opts">
-              <label class="co-opt"><input type="radio" name="a-buyer" value="personal" checked><span><b>個人</b><small>自己或家人吃</small></span></label>
-              <label class="co-opt"><input type="radio" name="a-buyer" value="team"><span><b>公司・團體</b><small>幫同事、社團一起訂</small></span></label>
-            </div>
-            <div class="co-fields" id="a-team" hidden>
-              <label>公司或團體名稱<input id="a-org" autocomplete="organization"></label>
-              <label>統一編號<input id="a-tax" inputmode="numeric" maxlength="8" placeholder="8 碼數字"></label>
-            </div>
-          </fieldset>
           <div class="acc-save"><button type="submit" class="btn">儲存</button><span class="acc-saved" id="acc-saved" role="status"></span></div>
         </form></section>
 
@@ -74,7 +65,8 @@
   <nav aria-label="逛逛"><h2 class="foot-h">逛逛</h2><ul><li><a href="shop.html">市集</a></li><li><a href="veggies.html">我們的好蔬</a></li><li><a href="farms.html">合作農場</a></li><li><a href="story.html">品牌故事</a></li><li><a href="guide.html">好蔬知識</a></li></ul></nav>
   <nav aria-label="幫助"><h2 class="foot-h">幫助</h2><ul><li><a href="faq.html">購物說明</a></li><li><a href="faq.html#return">退換貨</a></li><li><a href="faq.html#privacy">隱私權條款</a></li><li><a class="foot-line" href="https://lin.ee/PJHXHVrQ" rel="noopener"><img class="line-ico" src="img/line-icon.png" alt="">加入 LINE 好友</a></li></ul></nav>
   <nav aria-label="合作"><h2 class="foot-h">合作</h2><ul><li><a href="enterprise.html">企業採購</a></li><li><a href="custom.html">餐廳・特殊需求</a></li><li><a href="partner.html">成為合作農場</a></li></ul></nav>
-</div></footer>
+</div>
+<div class="container foot-copy"><p>© 2026 食在好蔬 Good Veggie. All rights reserved. 本站文字與照片未經同意，請勿轉載使用。</p></div></footer>
 <aside class="drawer" id="drawer" aria-label="購物車" aria-hidden="true" inert>
   <div class="drawer-head"><h2>購物車</h2><button type="button" id="cart-close" aria-label="關閉購物車">×</button></div>
   <div class="drawer-body" id="drawer-body"></div>

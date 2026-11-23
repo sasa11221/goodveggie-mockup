@@ -1,5 +1,5 @@
 :root{--bg:#f6f7f2;--card:#fff;--ink:#1f2a22;--ink2:#56625a;--leaf:#3f6b2a;--leaf2:#2b4d1c;--sprout:#e3edc8;--line:#dde3d4;--beet:#8e2c42;
---serif:'Noto Serif TC',serif;--sans:'Noto Sans TC',system-ui,sans-serif}
+--serif:'Noto Serif TC',serif;--sans:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.85 var(--sans)}
 img{max-width:100%;display:block}a{color:var(--leaf)}:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
 h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.35;margin:0;color:var(--ink)}
@@ -432,7 +432,7 @@ h1,h2,h3,.hero-sub,.lead,.opt small,.buybox-top>p,.door p,.fs-body p,.vcard .des
 .hero-sub{font:500 clamp(1.2rem,1.8vw,1.4rem)/1.65 var(--sans);color:var(--ink)}
 
 /* ── 1. 標題與品牌名都用一般黑體 ── */
-:root{--serif:'Noto Sans TC',system-ui,sans-serif}
+:root{--serif:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif}
 h1,h2,h3{font-family:var(--sans);font-weight:700;letter-spacing:.01em}
 .logo-text b{font:700 1.5rem var(--sans);letter-spacing:.04em;color:var(--ink)}
 .brand-h1{font:700 clamp(2.6rem,5.4vw,4rem)/1.15 var(--sans);letter-spacing:.04em;color:var(--ink)}
@@ -1556,6 +1556,73 @@ body:has(.drawer.open) .quiz{display:block}
 .text-link:focus{outline:none}
 .text-link:focus-visible{outline:2px solid var(--leaf2);outline-offset:3px;box-shadow:none}
 .quiz-toggle:focus-visible{outline:2px solid var(--leaf2)!important;outline-offset:3px!important}
+
+/* 結帳：配送方式與免運提示 */
+.co-ship{margin:0 0 14px}
+.co-shipway{margin:0;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--card);font-size:15px}
+.co-shipway b{display:block;color:var(--leaf2)}
+.co-shipway small{display:block;color:var(--ink2);font-size:14px;margin-top:2px;line-height:1.6}
+.co-free{margin:12px 0 0;font-size:14px;color:var(--ink2)}
+.co-free b{color:var(--beet)}
+.co-free.is-free b{color:var(--leaf)}
+
+/* 結帳：訂單內容可直接改 */
+.co-sum-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.co-sum-head .link-btn{font-size:14px}
+.co-edit{align-items:center;padding:6px 0}
+.co-edit .co-nm{display:flex;flex-direction:column;align-items:flex-start;min-width:0;line-height:1.4}
+.co-del{background:none;border:0;padding:0;margin-top:2px;color:var(--ink2);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer}
+.co-del:hover{color:var(--beet)}
+.co-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none}
+.co-right .qty-sm{height:28px}.co-right .qty-sm button{width:28px}
+.co-amt{font-variant-numeric:tabular-nums}
+
+/* 結帳：付款方式圖示 */
+.co-pay .co-opt{align-items:flex-start}
+.pay-ico{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:9px;background:var(--sprout);color:var(--leaf2)}
+.pay-ico svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.pay-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.pay-chips em{font-style:normal;font-size:12px;font-weight:500;letter-spacing:.02em;padding:1px 7px;border:1px solid var(--line);border-radius:5px;color:var(--ink2);background:var(--card)}
+#me-fields[hidden]+.co-check{margin-top:0}
+.co-me #edit-me:not([hidden])+#logout{margin-left:16px}
+.co-opts.co-pay{grid-template-columns:1fr;gap:10px}.co-pay .co-opt{align-items:center}.co-pay .co-opt input{margin-top:0}.co-pay .co-opt>span{flex:1;display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center}.co-pay .co-opt>span>small{grid-column:1/-1;grid-row:2}.co-pay .pay-chips{margin-top:0;justify-content:flex-end}@media(max-width:600px){.co-pay .co-opt>span{grid-template-columns:1fr}.co-pay .pay-chips{justify-content:flex-start;margin-top:4px}}
+.foot-copy{margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}.foot-copy p{margin:0;font-size:13px;color:var(--ink2)}
+.site-foot .foot-copy{border-top-color:rgba(255,255,255,.14)}.site-foot .foot-copy p{color:#a9b4a6}
+.preview-bar{background:#2f5a2a;color:#fff;font-size:14px;text-align:center;padding:8px 16px;line-height:1.6}.preview-bar a{color:#e3edc8;font-weight:500}
+
+/* 結帳：手機底部合計列 */
+.co-bar{display:none}
+@media(max-width:900px){
+  .co-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;position:fixed;left:0;right:0;bottom:0;z-index:40;
+    background:var(--card);border-top:1px solid var(--line);box-shadow:0 -6px 18px rgba(31,42,34,.08);
+    padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+    transition:transform .2s var(--ease)}
+  .co-bar.is-away{transform:translateY(110%)}
+  .co-bar-sum{display:flex;flex-direction:column;line-height:1.3;min-width:0}
+  .co-bar-sum small{font-size:12px;color:var(--ink2)}
+  .co-bar-sum b{font-size:1.2rem;font-variant-numeric:tabular-nums}
+  .co-bar .btn{flex:none;border:0;cursor:pointer;font:500 16px var(--sans);padding:12px 20px}
+  body:has(.co-bar) .site-foot{padding-bottom:96px}
+}
+@media(prefers-reduced-motion:reduce){.co-bar{transition:none}}
+
+/* 結帳：購買須知收合 */
+.notes-fold>summary{display:flex;align-items:baseline;gap:12px;cursor:pointer;list-style:none}
+.notes-fold>summary::-webkit-details-marker{display:none}
+.notes-fold>summary h2{margin:0}
+.notes-fold>summary span{font-size:14px;color:var(--ink2)}
+.notes-fold>summary::after{content:"展開";margin-left:auto;font-size:14px;color:var(--leaf);text-decoration:underline}
+.notes-fold[open]>summary::after{content:"收合"}
+.notes-fold[open]>summary{margin-bottom:16px}
+
+/* 首頁：大圖下面的購買重點 */
+.buy-points{padding:0;background:var(--card);border-bottom:1px solid var(--line)}
+.trust-row{list-style:none;margin:0;padding:18px 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 24px}
+.trust-row li{display:flex;flex-direction:column;line-height:1.5;padding-left:14px;border-left:3px solid var(--sprout)}
+.trust-row b{font-size:15px;color:var(--leaf2)}
+.trust-row span{font-size:14px;color:var(--ink2)}
+@media(max-width:900px){.trust-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.co-me{flex-wrap:wrap;row-gap:4px}.co-me .link-btn{white-space:nowrap}.co-me>span:nth-child(2){min-width:0;flex:1 1 160px}
 
 /* 對外版本：保險起見，任何漏掉的待辦都不顯示 */
 .tbd,.mockbar{display:none!important}

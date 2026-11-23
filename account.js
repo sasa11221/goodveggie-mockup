@@ -9,8 +9,6 @@
   const form = $('acc-form'); if (!form) return;
   let savedTimer = null;
   const flash = (msg) => { $('acc-saved').textContent = msg; clearTimeout(savedTimer); savedTimer = setTimeout(() => { $('acc-saved').textContent = ''; }, 2500); };
-  const buyer = () => form.querySelector('[name=a-buyer]:checked').value;
-  const syncTeam = () => { $('a-team').hidden = buyer() !== 'team'; };
 
   const render = () => {
     const u = load(UKEY);
@@ -18,8 +16,6 @@
     if (!u) return;
     $('acc-ava').textContent = u.name[0]; $('acc-name').textContent = u.name;
     $('a-name').value = u.name || ''; $('a-phone').value = u.phone || ''; $('a-addr').value = u.addr || '';
-    form.querySelector(`[name=a-buyer][value=${u.buyer === 'team' ? 'team' : 'personal'}]`).checked = true;
-    $('a-org').value = u.org || ''; $('a-tax').value = u.tax || ''; syncTeam();
     const n = u.notify || { order: true, harvest: true, farm: false };
     document.querySelectorAll('[data-notify]').forEach((c) => { c.checked = !!n[c.dataset.notify]; });
     const orders = (window.gvSeedOrders ? gvSeedOrders() : load(OKEY)) || [];
@@ -34,7 +30,6 @@
 
   $('acc-login').addEventListener('click', () => { const h = $('line-login-h'); if (h) h.click(); });
   $('acc-logout').addEventListener('click', () => { try { localStorage.removeItem(UKEY); } catch (e) {} window.dispatchEvent(new Event('gv-user')); });
-  form.addEventListener('change', (e) => { if (e.target.name === 'a-buyer') syncTeam(); });
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const u = load(UKEY); if (!u) return;
@@ -42,8 +37,7 @@
     const ok = !phone || /^09\d{8}$/.test(phone);
     $('a-phone-err').hidden = ok; $('a-phone').setAttribute('aria-invalid', String(!ok));
     if (!ok) { $('a-phone').focus(); return; }
-    save({ ...u, name: $('a-name').value.trim() || u.name, phone, addr: $('a-addr').value.trim(),
-           buyer: buyer(), org: $('a-org').value.trim(), tax: $('a-tax').value.trim() });
+    save({ ...u, name: $('a-name').value.trim() || u.name, phone, addr: $('a-addr').value.trim() });
     window.dispatchEvent(new Event('gv-user'));
     flash('已儲存，下次結帳會自動帶入');
   });
